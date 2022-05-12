@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "user",
+      "password": "password"
+    },
+    {
+      "id": 2,
+      "username": "axel",
+      "password": "baby"
+    }
+  ],
+  "posts": [
+    [
+      {
+        "username":"user",
+        "id": 1,
+        "title": "hello world",
+        "body": "first post"
+      },
+      {
+        "username":"user",
+        "id": 2,
+        "title": "i am a robot",
+        "body": "i wish i could love"
+      },
+      {
+        "username": "axel",
+        "id": 3,
+        "title": "I am a baby",
+        "body": "I will be born in May"
+      },
+      {
+        "username": "axel",
+        "id": 4,
+        "title": "I love my parents",
+        "body": "I love Mom and Dad"
+      }
+    ]
+  ]
+}
