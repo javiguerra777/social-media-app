@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import { getPeople } from '../utils/api';
+import { Button } from 'react-bootstrap';
 const Login = () => {
   const [User, setUser] = useState('');
   const [username, setUsername]= useState('');
@@ -20,14 +21,14 @@ const Login = () => {
     .then(response => setUser(response.data))
     .catch((err)=> console.log(err));
   },[]);
-  
+
   const navigate = useNavigate();
   const validate = (name, password)=> {
     for(let i in User){
     if(name?.toLowerCase() === User[i].username?.toLowerCase() && password === User[i].password){
       setFailedlogin(false);
       localStorage.setItem("token", name);
-      navigate('/home')
+      navigate('/home');
       // console.log('valid user');
       // console.log(User[i].username)
     }else if (name.length > 0 && password.length > 0 && failedLogin){
@@ -52,26 +53,32 @@ const Login = () => {
 
       <h1>Login</h1>
       <form id="form" onSubmit={submit}>
+        <div className='form-group'>
         <label htmlFor='username'>
           Username:
           <input
+          type='text'
+          className='form-control'
           value={newName}
           onChange={(e)=> setNewname(e.target.value)}
           />
         </label>
-        <label htmlFor='password'>
+        </div>
+       <div className='form-group'>
+       <label htmlFor='password'>
           Password:
           <input 
           type='password'
+          className='form-control'
           value={newPassword}
           onChange={(e)=> setNewPassword(e.target.value)}
           />
         </label>
-      <button type='submit' disabled={disabled}>Login</button>
+       </div>
+      <Button type='submit' className='primary' disabled={disabled}>Login</Button>
       </form>
       <hr/>
       <form>
-
         <Link to="/signup">Signup</Link>
       </form>
 

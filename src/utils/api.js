@@ -30,6 +30,13 @@ export const addPost= (post) => {
   })
 }
 //put routes
+export const editPost = (post, id)=> {
+  return axios.put(`${urlBase}/posts/${id}`, post, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+}
 
 //delete routes
 export const deleteUserPost =(id)=> {

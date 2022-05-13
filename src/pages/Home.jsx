@@ -1,14 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { getPosts, deleteUserPost, addPost } from '../utils/api';
-import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
+import { Link } from 'react-router-dom';
 const Home = () => {
   const [Post, setPost] = useState([]);
   const [active, setActive] = useState(false);
-  //const [newPost, setNewPost] =useState({});
   const bodyRef = useRef();
   const titleRef = useRef();
-  const navigate = useNavigate();
   const user = localStorage.getItem('token').toLowerCase();
   let highestId;
   //useEffects
@@ -30,16 +27,13 @@ const Home = () => {
     }
   }).map((post, index)=> {
     return (
-      <div key={post.id}>
-      <h1>{post.title} <button>Edit post</button> <button onClick={()=> deletePost(index, post.id)} className='delete'>x</button></h1>
+      <div className='card' key={post.id}>
+      <h5>{post.title} <Link to={`../edit/${[post.id]}`}>Edit Post</Link> <button onClick={()=> deletePost(index, post.id)} className='delete'>x</button></h5>
       <p>{post.body}</p>
       </div>
     )
   })
-  const logout=()=> {
-    localStorage.removeItem('token');
-    navigate('/');
-  };
+  
   const changeActive= ()=> {
     if(!active){
       setActive(true);
@@ -69,10 +63,9 @@ const Home = () => {
   }
   return (
     <>
-    <Header />
       <div>
         <h1>Home</h1>
-        <button onClick={logout}>Logout</button>
+        
       </div>
       <div>
         <button onClick={changeActive}>Create new post</button>

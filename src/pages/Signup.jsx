@@ -6,6 +6,7 @@ const Signup = () => {
  const passwordRef = useRef();
   const navigate = useNavigate();
   let disabled = false;
+
   if(!nameRef || !passwordRef){
     disabled = true;
   }
