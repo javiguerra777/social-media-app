@@ -19,16 +19,17 @@ const Login = () => {
     getPeople()
     .then(response => setUser(response.data))
     .catch((err)=> console.log(err));
-  },[])
+  },[]);
+  
   const navigate = useNavigate();
   const validate = (name, password)=> {
     for(let i in User){
-    if(name.toLowerCase() === User[i].username.toLowerCase() && password === User[i].password){
+    if(name?.toLowerCase() === User[i].username?.toLowerCase() && password === User[i].password){
       setFailedlogin(false);
       localStorage.setItem("token", name);
       navigate('/home')
-      console.log('valid user');
-      console.log(User[i].username)
+      // console.log('valid user');
+      // console.log(User[i].username)
     }else if (name.length > 0 && password.length > 0 && failedLogin){
       console.log('Invalid login')
     }

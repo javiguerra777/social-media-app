@@ -9,34 +9,78 @@
       "id": 2,
       "username": "axel",
       "password": "baby"
+    },
+    {
+      "username": "Slimshady67",
+      "password": "eminem",
+      "id": 3
+    },
+    {
+      "username": "hello",
+      "password": "hi",
+      "id": 4
+    },
+    {
+      "username": "javi",
+      "password": "raptors",
+      "id": 5
+    },
+    {
+      "username": "Lebron",
+      "password": "nba",
+      "id": 6
+    },
+    {
+      "username": "NewUser",
+      "password": "hi",
+      "id": 7
     }
   ],
   "posts": [
-    [
-      {
-        "username":"user",
-        "id": 1,
-        "title": "hello world",
-        "body": "first post"
-      },
-      {
-        "username":"user",
-        "id": 2,
-        "title": "i am a robot",
-        "body": "i wish i could love"
-      },
-      {
-        "username": "axel",
-        "id": 3,
-        "title": "I am a baby",
-        "body": "I will be born in May"
-      },
-      {
-        "username": "axel",
-        "id": 4,
-        "title": "I love my parents",
-        "body": "I love Mom and Dad"
-      }
-    ]
+    {
+      "username": "axel",
+      "id": 3,
+      "title": "I am a baby",
+      "body": "I will be born in May"
+    },
+    {
+      "username": "axel",
+      "id": 4,
+      "title": "I love my parents",
+      "body": "I love Mom and Dad"
+    },
+    {
+      "id": 5
+    },
+    {
+      "title": "hi",
+      "body": "hello",
+      "username": "user",
+      "id": 6
+    },
+    {
+      "title": "error fixed",
+      "body": "thank god",
+      "username": "user",
+      "id": 7
+    },
+    {
+      "title": "HI",
+      "body": "I am the GOAT",
+      "username": "lebron",
+      "id": 8
+    },
+    {
+      "title": "NBA Thread",
+      "body": "JORDAN SUCKS",
+      "username": "lebron",
+      "id": 9
+    },
+    {
+      "title": "I fixed my bug",
+      "body": "I am so glad I fixed my code",
+      "username": "javi",
+      "id": 10
+    }
   ]
 }

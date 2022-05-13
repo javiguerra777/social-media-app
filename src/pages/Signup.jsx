@@ -1,38 +1,44 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useRef } from 'react';
+import { createNewUser } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 const Signup = () => {
-  const [name, setName] = useState('');
-  const [password, setPassword] =useState('');
-  const [newName, setNewname] =useState('');
-  const [newPassword, setNewpassword] = useState('');
+ const nameRef = useRef();
+ const passwordRef = useRef();
   const navigate = useNavigate();
   let disabled = false;
-  if(!newName || !newPassword){
+  if(!nameRef || !passwordRef){
     disabled = true;
   }
-  const createUser= () => {
-    setName(newName);
-    setPassword(newPassword);
-    localStorage.setItem('token', name);
-    navigate('/home');
+  const createUser= (e) => {
+    //e.preventDefault();
+    const username = nameRef.current.value.trim();
+    const password = passwordRef.current.value.trim();
+    localStorage.setItem('token', username);
+    createNewUser({username, password})
+    navigate('/home')
   }
   return (
     <div>
       <h1>Signup</h1>
       <form onSubmit={createUser}>
-        <label htmlfor="username">
+        <label htmlFor="username">
           Username:
           <input 
-          value={newName}
-          onChange={(e)=> setNewname(e.target.value)}
+          type='text'
+          id='username'
+          name='username'
+          placeholder='SlimShady67'
+          ref={nameRef}
           />
         </label>
-        <label htmlfor="password">
+        <label htmlFor="password">
           Password:
           <input
-          value={newPassword}
-          onChange={(e)=> setNewpassword(e.target.value)}
+          type='password'
+          id='password'
+          name='password'
+          placeholder='password'
+          ref={passwordRef}
           />
         </label>
       <button type="submit" disabled ={disabled}>Create Profile</button>
