@@ -1,0 +1,7 @@
+.card-message:hover {
+  background-color: blanchedalmond;
+  cursor: pointer;
+}
+.messages-container {
+  display: flex;
+}

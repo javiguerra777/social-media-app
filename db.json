@@ -39,6 +39,16 @@
       "username": "Testsubject",
       "password": "passcode",
       "id": 8
+    },
+    {
+      "username": "Curry",
+      "password": "chokes3-1lead",
+      "id": 9
+    },
+    {
+      "username": "Weenie",
+      "password": "bro",
+      "id": 10
     }
   ],
   "posts": [
@@ -46,7 +56,19 @@
       "username": "axel",
       "id": 3,
       "title": "I am a baby",
-      "body": "I will be born in May"
+      "body": "I will be born in May",
+      "comments": [
+        {
+          "username": "Curry",
+          "comment": "Congrats",
+          "id": 1
+        },
+        {
+          "username": "Lebron",
+          "comment": "Hello Axel",
+          "id": 2
+        }
+      ]
     },
     {
       "username": "axel",
@@ -54,10 +76,10 @@
       "title": "I love my parents",
       "body": "I love Mom and Dad"
     },
-    { 
-      "username":"NewUser",
+    {
+      "username": "NewUser",
       "title": "inserted manually",
-      "body":"social media admin fixed this error",
+      "body": "social media admin fixed this error",
       "id": 5
     },
     {
@@ -73,20 +95,14 @@
       "id": 7
     },
     {
-      "title": "HI",
-      "body": "I am the GOAT",
+      "title": "edited post",
+      "body": "Lebron edited",
       "username": "lebron",
       "id": 8
     },
     {
-      "title": "NBA Thread",
-      "body": "JORDAN SUCKS",
-      "username": "lebron",
-      "id": 9
-    },
-    {
-      "title": "i added editing",
-      "body": "users can edit their posts",
+      "title": "This ",
+      "body": "is so cool",
       "username": "javi",
       "id": 10
     },
@@ -107,6 +123,38 @@
       "body": "facebook runs like this",
       "username": "javi",
       "id": 13
+    },
+    {
+      "title": "mj",
+      "body": "worst player ever",
+      "username": "lebron",
+      "id": 14
+    },
+    {
+      "title": "we are going to win",
+      "body": "gsw by 50 tonight",
+      "username": "curry",
+      "id": 15
+    },
+    {
+      "title": "I fixed my app",
+      "body": "i am very happy",
+      "username": "javi",
+      "id": 16
+    }
+  ],
+  "messages": [
+    {
+      "username": "javi",
+      "to": "axel",
+      "message": "I love you son",
+      "id": 1
+    },
+    {
+      "username": "javi",
+      "to": "lebron",
+      "message": "whats up king james",
+      "id": 2
     }
   ]
 }

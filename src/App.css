@@ -1,1 +1,4 @@
-
+.btn-container {
+  display: flex;
+  align-self: center;
+}

@@ -1,26 +1,29 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { createNewUser } from '../utils/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import context from '../context/context';
+import { useContext } from 'react';
+import { Button } from 'react-bootstrap';
 const Signup = () => {
- const nameRef = useRef();
- const passwordRef = useRef();
+  const {authenticateLogin} = useContext(context);
+  const [username, setName] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
   let disabled = false;
 
-  if(!nameRef || !passwordRef){
+  if(!username || !password){
     disabled = true;
   }
-  const createUser= (e) => {
-    //e.preventDefault();
-    const username = nameRef.current.value.trim();
-    const password = passwordRef.current.value.trim();
+  const createUser= () => {
     localStorage.setItem('token', username);
-    createNewUser({username, password})
-    navigate('/home')
+    createNewUser({username: username, password: password});
+    authenticateLogin();
+    navigate('/home');
   }
   return (
     <div>
       <h1>Signup</h1>
+      <Link to='/'>Cancel</Link>
       <form onSubmit={createUser}>
         <label htmlFor="username">
           Username:
@@ -29,7 +32,8 @@ const Signup = () => {
           id='username'
           name='username'
           placeholder='SlimShady67'
-          ref={nameRef}
+          value={username}
+          onChange={(e)=> setName(e.target.value)}
           />
         </label>
         <label htmlFor="password">
@@ -39,13 +43,16 @@ const Signup = () => {
           id='password'
           name='password'
           placeholder='password'
-          ref={passwordRef}
+          value={password}
+          onChange={(e)=> setPassword(e.target.value)}
           />
         </label>
-      <button type="submit" disabled ={disabled}>Create Profile</button>
+        <div className='btn-container'>
+        <Button style={{backgroundColor:"lightblue"}} type="submit" disabled ={disabled}>Create Profile</Button>
+        </div>
       </form>
     </div>
   )
 }
 
-export default Signup
+export default Signup;

@@ -1,18 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { editPost, getPost } from '../utils/api';
+import { Button } from 'react-bootstrap';
 const Edit = () => {
   const user = localStorage.getItem('token');
   const [post, setPost] = useState({});
   const {id} = useParams();
-  const titleRef = useRef();
-  const bodyRef = useRef();
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
   const navigate = useNavigate();
   let disabled = false;
-  if(titleRef === '' || bodyRef === ''){
+  if(!title || !body){
     disabled = true;
   }
-
   useEffect(()=> {
     getPost(id)
     .then(({data: post}) => setPost(post))
@@ -20,34 +20,38 @@ const Edit = () => {
   },[getPost, id]);
 
   const updatePost=()=> {
-    const title = titleRef.current.value;
-    const body = bodyRef.current.value;
-    const post = {
+    const editpost = {
       title: title,
       body: body,
       username: user
     }
-    editPost(post, id);
+    editPost(editpost, id);
     navigate('/home');
   }
-  //console.log(post)
-  // console.log(titleRef);
   return (
     <div>
       <form>
         <label htmlFor="newtitle">
           Edit title:
           <input
-          ref={titleRef}
+          type='text'
+          id='newtitle'
+          value={title}
+          onChange={(e)=> setTitle(e.target.value)}
           />
         </label>
         <label htmlFor="newbody">
           Edit body:
           <input
-          ref={bodyRef}
+          type='text'
+          id='newbody'
+          value={body}
+          onChange={(e)=> setBody(e.target.value)}
           />
         </label>
-      <button disabled={disabled} onClick={updatePost} > Submit Changes</button>
+        <div className='btn-container'>
+        <Button disabled={disabled} onClick={updatePost} > Submit Changes</Button>
+        </div>
 
       </form>
     </div>

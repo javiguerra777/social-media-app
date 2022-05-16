@@ -4,7 +4,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import { getPeople } from '../utils/api';
 import { Button } from 'react-bootstrap';
+import context from '../context/context';
+import { useContext } from 'react';
 const Login = () => {
+  const {authenticateLogin} = useContext(context);
   const [User, setUser] = useState('');
   const [username, setUsername]= useState('');
   const [password, setPassword]= useState('');
@@ -28,6 +31,7 @@ const Login = () => {
     if(name?.toLowerCase() === User[i].username?.toLowerCase() && password === User[i].password){
       setFailedlogin(false);
       localStorage.setItem("token", name);
+      authenticateLogin();
       navigate('/home');
       // console.log('valid user');
       // console.log(User[i].username)
@@ -75,11 +79,13 @@ const Login = () => {
           />
         </label>
        </div>
-      <Button type='submit' className='primary' disabled={disabled}>Login</Button>
+       <div className='btn-container'>
+      <Button style={{backgroundColor: 'green'}} type='submit' disabled={disabled}>Login</Button>
+      </div>
       </form>
       <hr/>
       <form>
-        <Link to="/signup">Signup</Link>
+        <p>Click Here to Signup: <span><Link to="/signup">Signup</Link></span></p>
       </form>
 
       </div>

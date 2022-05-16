@@ -1,0 +1,17 @@
+.messages {
+  background-color: lightblue;
+  position:fixed;
+  right: 0;
+  bottom: 50px;
+}
+.onemessage {
+  margin-bottom: 5px;
+}
+.footer {
+  display: flex;
+  justify-content: space-evenly;
+  position: fixed;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+}

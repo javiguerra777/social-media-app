@@ -2,10 +2,11 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/header.css';
 
-const Header = () => {
+const Header = ({authenticateLogin}) => {
   const navigate = useNavigate();
   const logout=()=> {
     localStorage.removeItem('token');
+    authenticateLogin();
     navigate('/');
   };
   return (
@@ -14,6 +15,7 @@ const Header = () => {
     <button onClick={logout}>Logout</button>
       <Link to='/home'>Home</Link>
       <Link to='/media'>Media Posts</Link>
+      <Link to='/messages'>Messages</Link>
     </nav>
     </>
   )

@@ -12,6 +12,9 @@ export const getPosts = ()=> {
 export const getPost = (id)=> {
   return axios.get(`${urlBase}/posts/${id}`)
 }
+export const getMessages=()=> {
+  return axios.get(`${urlBase}/messages`)
+}
 
 //post routes
 export const createNewUser = (user)=> {
