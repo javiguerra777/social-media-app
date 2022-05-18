@@ -1,39 +1,56 @@
 import React, { useState } from 'react';
-import { createNewUser } from '../utils/api';
 import { useNavigate, Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/firebase-config';
 import context from '../context/context';
 import { useContext } from 'react';
-import { Button } from 'react-bootstrap';
+
 const Signup = () => {
   const {authenticateLogin} = useContext(context);
-  const [username, setName] = useState('');
-  const [password, setPassword] = useState('');
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
   const navigate = useNavigate();
   let disabled = false;
 
-  if(!username || !password){
+  if(!registerEmail || !registerPassword){
     disabled = true;
   }
-  const createUser= () => {
-    localStorage.setItem('token', username);
-    createNewUser({username: username, password: password});
+
+  const createUser= async (e) => {
+    e.preventDefault();
+    try{
+      const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
+    }catch(err){
+      console.log(err.message);
+    }
     authenticateLogin();
-    navigate('/home');
+    navigate('/home'); 
   }
+
   return (
     <div>
       <h1>Signup</h1>
       <Link to='/'>Cancel</Link>
       <form onSubmit={createUser}>
-        <label htmlFor="username">
+        {/* <label htmlFor="username">
           Username:
           <input 
           type='text'
           id='username'
           name='username'
           placeholder='SlimShady67'
-          value={username}
-          onChange={(e)=> setName(e.target.value)}
+          />
+        </label> */}
+        <label htmlFor="email">
+          Email:
+          <input
+          type='email'
+          id='email'
+          name='email'
+          placeholder='eminem54@gmail.com'
+          
+          onChange={(e)=> setRegisterEmail(e.target.value)}
           />
         </label>
         <label htmlFor="password">
@@ -43,8 +60,8 @@ const Signup = () => {
           id='password'
           name='password'
           placeholder='password'
-          value={password}
-          onChange={(e)=> setPassword(e.target.value)}
+    
+          onChange={(e)=> setRegisterPassword(e.target.value)}
           />
         </label>
         <div className='btn-container'>

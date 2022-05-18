@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { auth } from '../firebase/firebase-config';
+import { signOut } from 'firebase/auth';
 import '../styles/header.css';
 
 const Header = ({authenticateLogin}) => {
   const navigate = useNavigate();
-  const logout=()=> {
-    localStorage.removeItem('token');
+  const logout= async()=> {
+    await signOut(auth);
     authenticateLogin();
     navigate('/');
   };

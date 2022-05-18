@@ -1,18 +1,24 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { getPosts, deleteUserPost } from '../utils/api';
 import { Link } from 'react-router-dom';
+import { auth } from '../firebase/firebase-config';
+import { onAuthStateChanged} from 'firebase/auth';
 const Home = () => {
   const [Post, setPost] = useState([]);
-  const user = localStorage.getItem('token').toLowerCase();
+  // const user = localStorage.getItem('token').toLowerCase();
+  const [user, setUser]= useState({});
   let highestId;
   //useEffects
+  onAuthStateChanged(auth, (currentUser)=> {
+    setUser(currentUser);
+  });
   useEffect(()=> {
     getPosts()
     .then(response => {
       setPost(response.data)})
     .catch((err)=> console.log(err));
   },[]);
-
+  console.log(user)
   for(let i in Post){
     highestId = Math.max(Post[i].id);
   }
