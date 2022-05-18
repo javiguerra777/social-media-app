@@ -1,20 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getPost } from '../utils/api';
 import { Button } from 'react-bootstrap';
-
+import { db } from '../firebase/firebase-config';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 const Post = () => {
   const [post, setPost] = useState([]);
   const {id} = useParams();
   const commentRef = useRef();
-  const user = localStorage.getItem('token');
+  const thePost = doc(db, 'posts', id);
 
   useEffect(()=> {
-    getPost(id)
-    .then(({data: post}) => setPost(post))
-    .catch((err)=> console.log(err));
-  },[getPost, id]);
-
+    const getPost = async ()=> {
+      const data = await getDoc(thePost);
+      setPost(data.docs.map((doc)=> ({...doc.data(), id: doc.id})))
+    }
+    getPost();
+  },[getDoc, id]);
+  
   const postComment = post.comments?.map(comment => {
     return(
       <div key={comment.id}>
@@ -33,7 +35,7 @@ const Post = () => {
   return (
     <>
     <div>
-      <h4>{post.username}</h4>
+      <h4>{post.email}</h4>
       <h5>{post.title}</h5>
       <p>{post.body}</p>
     </div>

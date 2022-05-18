@@ -1,45 +1,50 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { getPosts, deleteUserPost } from '../utils/api';
 import { Link } from 'react-router-dom';
-import { auth } from '../firebase/firebase-config';
+import { auth, db } from '../firebase/firebase-config';
+import { getDocs, collection, deleteDoc, doc } from 'firebase/firestore';
 import { onAuthStateChanged} from 'firebase/auth';
 const Home = () => {
   const [Post, setPost] = useState([]);
-  // const user = localStorage.getItem('token').toLowerCase();
   const [user, setUser]= useState({});
-  let highestId;
+  const postsCollectionsRef = collection(db, 'posts');
   //useEffects
   onAuthStateChanged(auth, (currentUser)=> {
     setUser(currentUser);
   });
+  
   useEffect(()=> {
-    getPosts()
-    .then(response => {
-      setPost(response.data)})
-    .catch((err)=> console.log(err));
-  },[]);
-  console.log(user)
-  for(let i in Post){
-    highestId = Math.max(Post[i].id);
-  }
-  console.log(highestId);
-
-  const userPosts = Post.filter(post => {
-    if(post.username?.toLowerCase() === user){
-      return post;
+    const getPosts = async ()=> {
+      const data = await getDocs(postsCollectionsRef);
+      setPost(data.docs.map((doc)=> ({...doc.data(), id: doc.id})))
     }
-  }).map((post, index)=> {
-    return (
-      <div className='card' key={post.id}>
-      <h5>{post.title} <Link to={`../edit/${[post.id]}`}>Edit Post</Link> <button onClick={()=> deletePost(index, post.id)} className='delete'>x</button></h5>
-      <p>{post.body}</p>
-      </div>
-    )
-  });
-  const deletePost = (index, id) => {
-    const newPosts = Post && Post.filter((element, i) => element.id !== id);
-    setPost(newPosts);
-    deleteUserPost(id);
+    getPosts();
+  },[]);
+
+  // const userPosts = Post.filter(post => {
+  //   if(post.email?.toLowerCase() === user.email){
+  //     return post;
+  //   }
+  // }).map((post)=> {
+  //   return (
+  //     <div className='card' key={post.id}>
+  //     <h5>{post.title} <Link to={`../edit/${[post.id]}`}>Edit Post</Link> <button onClick={()=> deletePost(post.id)} className='delete'>x</button></h5>
+  //     <p>{post.body}</p>
+  //     </div>
+  //   )
+  // });
+  const deletePost = async (id) => {
+    try{
+    const thispost = doc(db, 'posts', id);
+    // const newPosts = Post && Post.filter((element, i) => element.id !== id);
+    // setPost(newPosts);
+    deleteDoc(thispost);
+
+    const remainingPosts = Post.filter((post)=> post.id !== id );
+    setPost(remainingPosts);
+    }catch(err){
+      console.log(err)
+    }
+    
   }
   return (
     <>
@@ -48,7 +53,18 @@ const Home = () => {
       </div>
       <div>
         <Link to='/newpost'>Create new post</Link>
-      {userPosts}
+      {Post.filter(post => {
+    if(post.email?.toLowerCase() === user.email){
+      return post;
+    }
+  }).map((post)=> {
+    return (
+      <div className='card' key={post.id}>
+      <h5>{post.title} <Link to={`../edit/${[post.id]}`}>Edit Post</Link> <button onClick={()=> deletePost(post.id)} className='delete'>x</button></h5>
+      <p>{post.body}</p>
+      </div>
+    )
+  })}
       </div>
     </>
   )

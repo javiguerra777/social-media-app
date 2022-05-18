@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addPost } from '../utils/api';
+import { db, auth } from '../firebase/firebase-config';
+import { collection, addDoc } from 'firebase/firestore';
 
 const Newpost = () => {
-  const user = localStorage.getItem('token');
+  const postCollection = collection(db, 'posts');
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const navigate = useNavigate();
@@ -16,9 +18,9 @@ const Newpost = () => {
     const newPost = {
       title:title,
       body:body,
-      username:user,
+      email: auth.currentUser.email,
     }
-    addPost(newPost);
+    addDoc(postCollection,newPost);
     navigate('/home');
   }
   return (

@@ -1,31 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { editPost, getPost } from '../utils/api';
 import { Button } from 'react-bootstrap';
+import { db, auth } from '../firebase/firebase-config';
+import {doc, updateDoc} from 'firebase/firestore';
 const Edit = () => {
-  const user = localStorage.getItem('token');
-  const [post, setPost] = useState({});
   const {id} = useParams();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const post = doc(db, 'posts', id);
   const navigate = useNavigate();
   let disabled = false;
   if(!title || !body){
     disabled = true;
   }
-  useEffect(()=> {
-    getPost(id)
-    .then(({data: post}) => setPost(post))
-    .catch((err)=> console.log(err));
-  },[getPost, id]);
-
-  const updatePost=()=> {
+  
+  const updatePost= async ()=> {
     const editpost = {
       title: title,
       body: body,
-      username: user
+      email: auth.currentUser.email
     }
-    editPost(editpost, id);
+    await updateDoc(post, editpost);
     navigate('/home');
   }
   return (
