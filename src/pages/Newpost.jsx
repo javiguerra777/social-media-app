@@ -6,12 +6,44 @@ import { useSelector } from 'react-redux/es/exports';
 import styled from 'styled-components';
 
 const NewPostWrapper = styled.main`
+background-color: #fffaf0;
+height: 85vh;
 width: 100vw;
+.above-post{
+  background-color: #fffaf0;
+  position: fixed;
+  top: 3em;
+  width: 100%;
+}
+.exit {
+  background:transparent;
+  border: none;
+  color: white;
+}
+.submit-post {
+  background-color: #6495ED;
+  color: white;
+  border: none;
+  border-radius: .5em;
+  margin-right: .2em;
+}
 header {
+  background-color: #333333;
+  color: white;
   display: flex;
   justify-content:space-between;
+  align-items: center;
+  position:fixed;
+  top:0;
+  z-index:2;
+  height: 3em;
+  width: 100%;
 }
-form {
+input {
+  width: 100%;
+}
+.form {
+  position:relative;
   display: flex;
   flex-direction: column;
   width: 100%
@@ -19,6 +51,9 @@ form {
 textarea {
   width: 100%;
   max-width: 100%;
+}
+button {
+  height: 75%;
 }
 `;
 
@@ -47,13 +82,15 @@ const Newpost = () => {
   return (
     <NewPostWrapper>
       <header>
-        <button type="button" onClick={()=>navigate("/home")}>X</button>
+        <button className="exit" type="button" onClick={()=>navigate("/home")}>X</button>
         <h4>Create Post</h4>
-        <button disabled={disabled} type='submit'>Post</button>
+        <button className="submit-post" disabled={disabled} type='button' onClick={createNewPost}>Post</button>
       </header>
-    <form onSubmit={createNewPost}>
+      <section className='above-post'>
+        <p><strong>{user.name}</strong></p>
+      </section>
+    <section className='form'>
           <label htmlFor='title'>
-            Title:
             <input
             type='text'
             id='title'
@@ -77,7 +114,7 @@ const Newpost = () => {
           </label>
           <div className='btn-container'>
           </div>
-      </form>
+      </section>
     </NewPostWrapper>
   )
 }

@@ -3,9 +3,39 @@ import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { db } from '../firebase/firebase-config';
 import { collection, doc, getDocs } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux/es/exports';
 import { nanoid } from 'nanoid';
+import styled from 'styled-components';
+
+const PostWrapper = styled.main`
+background-color: #fffaf0;
+height: 85vh;
+width: 100vw;
+overflow-y:scroll;
+margin-bottom: 6em;
+.comment {
+  position:relative;
+}
+.comment-form {
+  position: fixed;
+  bottom: 3em;
+}
+header {
+  background-color: #333333;
+  color: white;
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+  position:fixed;
+  top:0;
+  z-index:2;
+  height: 3em;
+  width: 100%;
+}
+`;
 const Post = () => {
+  const navigate = useNavigate();
   const user = useSelector((state)=> state.user)
   const [post, setPost] = useState([]);
   const {id} = useParams();
@@ -32,13 +62,17 @@ const Post = () => {
     setComment("")
   }
   return (
-    <>
-    <div>
-      <h4>{post.username}</h4>
+    <PostWrapper>
+      <header>
+        <button onClick={()=> navigate('/home')} type="button">arrow home</button>
+        <h4>{post.username}</h4>
+      </header>
+      <div className='comment'>
       <h5>{post.title}</h5>
       <p>{post.body}</p>
-    </div>
+      </div>
     <div>
+      
       {comments.map(comment => {
         return (
           <div key={comment.id}>
@@ -48,7 +82,7 @@ const Post = () => {
     )
   })}
     </div>
-    <form className='commentform' onSubmit={addComment}>
+    <form className='comment-form' onSubmit={addComment}>
     <label>
     <Button style={{backgroundColor:'blue', color:'white'}} type='submit'> Add comment</Button>{' '}
       <input
@@ -59,8 +93,8 @@ const Post = () => {
       />
     </label>
     </form>
-    </>
+    </PostWrapper>
   )
 }
 
-export default Post
+export default Post;
