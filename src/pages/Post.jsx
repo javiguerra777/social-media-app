@@ -1,53 +1,60 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { db } from '../firebase/firebase-config';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDocs } from 'firebase/firestore';
+import { useSelector } from 'react-redux/es/exports';
+import { nanoid } from 'nanoid';
 const Post = () => {
+  const user = useSelector((state)=> state.user)
   const [post, setPost] = useState([]);
   const {id} = useParams();
-  const commentRef = useRef();
+  const [comment, setComment] = useState('');
   const thePost = doc(db, 'posts', id);
-
-  useEffect(()=> {
-    const getPost = async ()=> {
-      const data = await getDoc(thePost);
-      setPost(data.docs.map((doc)=> ({...doc.data(), id: doc.id})))
-    }
-    getPost();
-  },[getDoc, id]);
+  const [dbData, setDbData] = useState([thePost]);
+  const postsCollectionRef = collection(db, "posts");
+  const [comments, setComments] = useState([]);
+  useEffect(() => {
+    const getDbData = async () => {
+      const data = await getDocs(postsCollectionRef);
+      setDbData(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+    };
+    getDbData();
+  }, [postsCollectionRef, id]);
+  useEffect(() => {
+    const pData = dbData.find(data => data.id === id);
+    setPost(pData);
+  }, [dbData, id]);
   
-  const postComment = post.comments?.map(comment => {
-    return(
-      <div key={comment.id}>
-        <h5>{comment.username}</h5>
-        <p>{comment.comment}</p>
-      </div>
-    )
-  });
-  console.log();
-  
-  const addComment = (e)=> {
-  e.preventDefault();  
-  const comment = commentRef.current.value;
-  console.log(comment);
+  const addComment = (e) => {
+    e.preventDefault();
+    setComments((prev) => [...prev, { id: nanoid(), name: user.name, comment }])
+    setComment("")
   }
   return (
     <>
     <div>
-      <h4>{post.email}</h4>
+      <h4>{post.username}</h4>
       <h5>{post.title}</h5>
       <p>{post.body}</p>
     </div>
     <div>
-    {postComment}
+      {comments.map(comment => {
+        return (
+          <div key={comment.id}>
+            <h5>{comment.name}</h5>
+            <p>{comment.comment}</p>
+      </div>
+    )
+  })}
     </div>
     <form className='commentform' onSubmit={addComment}>
     <label>
     <Button style={{backgroundColor:'blue', color:'white'}} type='submit'> Add comment</Button>{' '}
       <input
       placeholder='add comment here'
-      ref={commentRef}
+      value={comment}
+      onChange={(e)=> setComment(e.target.value)} 
       required
       />
     </label>

@@ -1,5 +1,4 @@
 import './App.css';
-import { useState } from 'react';
 import Layout from './pages/Layout';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -9,60 +8,50 @@ import Media from './pages/Media';
 import Post from './pages/Post';
 import Messages from './pages/Messages';
 import NotFound from './pages/NotFound';
-import context from './context/context';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import Newpost from './pages/Newpost';
+import { useSelector } from 'react-redux/es/exports';
 
 const ProtectedRoute = ({loggedin, children})=> {
   if(!loggedin){
     return <Navigate to="/" replace/>
   }
-
   return children;
 }
 function App() {
-  const [loggedin, setLoggedin] = useState(false);
+  const loggedIn = useSelector((state) => state.user.loggedIn);
   return (
-    <context.Provider value={{
-      loggedin,
-      authenticateLogin: ()=> {if(!loggedin){
-        setLoggedin(true);
-      }else {
-        setLoggedin(false);
-      }}
-    }}>
     <Routes>
       <Route path='/' element={<Layout/>}>
       <Route index element = {<Login />} />
       <Route path='signup' element={<Signup />} />
       <Route path='home' element={
-      <ProtectedRoute loggedin={loggedin}>
+      <ProtectedRoute loggedin={loggedIn}>
       <Home />
       </ProtectedRoute>} />
       <Route path='edit/:id' element={
-      <ProtectedRoute loggedin={loggedin}>
+      <ProtectedRoute loggedin={loggedIn}>
       <Edit/>
       </ProtectedRoute>}/>
       <Route path='media' element={
-      <ProtectedRoute loggedin={loggedin}>
+      <ProtectedRoute loggedin={loggedIn}>
       <Media/>
       </ProtectedRoute>}/>
       <Route path='posts/:id' element={
-      <ProtectedRoute loggedin={loggedin}>
+      <ProtectedRoute loggedin={loggedIn}>
       <Post />
       </ProtectedRoute>} />
       <Route path="messages" element={
-      <ProtectedRoute loggedin={loggedin}>
+      <ProtectedRoute loggedin={loggedIn}>
       <Messages/>
       </ProtectedRoute>} />
       <Route path="newpost" element={
-      <ProtectedRoute loggedin={loggedin}>
+      <ProtectedRoute loggedin={loggedIn}>
       <Newpost/>
       </ProtectedRoute>} />
       <Route path='*' element={<NotFound />}/>
       </Route>
     </Routes>
-    </context.Provider>
   );
 }
 

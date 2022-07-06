@@ -3,13 +3,16 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import context from '../context/context';
-import { useContext } from 'react';
 import { auth } from '../firebase/firebase-config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useDispatch } from 'react-redux/es/hooks/useDispatch';
+import { db } from '../firebase/firebase-config';
+import { getDocs, collection, where, query } from 'firebase/firestore';
+import { toggleLoggedIn,updateUser } from '../store/userSlice';
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {authenticateLogin} = useContext(context);
+  const userCollectionRef = collection(db, 'users');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [failedLogin, setFailedlogin] = useState(false);
@@ -17,19 +20,34 @@ const Login = () => {
   if(!email || !password){
     disabled=true;
   }
-
   const login = async (e)=> {
     e.preventDefault();
     try{
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      if(user){
-        setFailedlogin(false);
-        authenticateLogin();
-        navigate('/home')
+      const thisuser = await signInWithEmailAndPassword(auth, email, password);
+      if (thisuser) {
+      const q = query(userCollectionRef, where("email", "==", email));
+        const getData = async () => {
+        const userData = []
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          return (doc.id, "=>", userData.push(doc.data()))
+        });
+          dispatch(updateUser(userData[0],userData[1],userData[2]))
+        }
+        getData();
+        dispatch(toggleLoggedIn());
+        navigate('/home');
       }
     }catch(err){
       console.log(err.message);
+      setFailedlogin(true);
+      setPassword('');
     }
+  }
+  if(failedLogin){
+    setTimeout(()=>{
+      setFailedlogin(false)
+    }, 4000)
   }
   return (
     <div className='container'>
@@ -75,4 +93,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Login;

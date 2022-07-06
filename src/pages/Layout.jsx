@@ -2,15 +2,14 @@ import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Outlet } from 'react-router-dom';
-import { useContext } from 'react';
-import context from '../context/context';
+import { useSelector } from 'react-redux/es/exports';
 const Layout = () => {
-const {loggedin, authenticateLogin} = useContext(context);
+  const user = useSelector((state)=> state.user);
   return (
     <>
-    {loggedin && <Header authenticateLogin={authenticateLogin} />}
+    {user.loggedIn && <Header />}
     <Outlet/>
-    {loggedin && <Footer/>}
+      {user.loggedIn && <Footer />}
     </>
   )
 }

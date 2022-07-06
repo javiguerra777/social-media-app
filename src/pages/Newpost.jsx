@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addPost } from '../utils/api';
-import { db, auth } from '../firebase/firebase-config';
+import { db } from '../firebase/firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
-
+import { useSelector } from 'react-redux/es/exports';
 const Newpost = () => {
+  const user = useSelector((state) => state.user);
   const postCollection = collection(db, 'posts');
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -18,7 +18,9 @@ const Newpost = () => {
     const newPost = {
       title:title,
       body:body,
-      email: auth.currentUser.email,
+      userid: user.uid,
+      useremail: user.email,
+      username: user.name
     }
     addDoc(postCollection,newPost);
     navigate('/home');
@@ -38,14 +40,14 @@ const Newpost = () => {
           </label>
           <label htmlFor='body'>
             Body:
-            <input
+            <textfield
             type='text'
             id='body'
             name='body'
             placeholder='Your message'
             value={body}
             onChange={(e)=> setBody(e.target.value)}
-            />
+            ></textfield>
           </label>
           <div className='btn-container'>
           <button disabled={disabled} type='submit'>Submit post</button>

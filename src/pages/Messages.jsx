@@ -1,43 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { getMessages } from '../utils/api';
+import React, { useState } from 'react';
 import '../styles/messages.css';
 import Thread from '../components/Thread';
-export const Messages = () => {
-  const [messages, setMessages] = useState([]);
-  const [activeMessage, setActiveMessage] = useState(0);
-  const user = localStorage.getItem('token');
+import { useSelector } from 'react-redux/es/exports';
 
-  useEffect(()=> {
-    getMessages()
-    .then(response => setMessages(response.data))
-    .catch(err => console.log(err));
-  },[]);
+export const Messages = () => {
+  const { user } = useSelector((state)=> state.user)
+  const [messages] = useState([]);
+  const [activeMessage, setActiveMessage] = useState(0);
+  
   const showMessage = (id)=> {
     console.log(id);
     setActiveMessage(id);
   }
-
-  const userMessages = messages.filter(message => {
-    if(message.username?.toLowerCase() === user){
-      return message;
-    }
-  }).map((message, index)=> {
-    return (
-      <div className='card onemessage card-message' key={message.id} onClick={()=>showMessage(message.id)}>
-        <h5>To: {message.to}</h5>
-        <p>{message.message}</p>
-      </div>
-    )
-  });
   return (
     <>
     <div>Messages</div>
     <div className='messages-container'>
       <div>
-      {userMessages}
+        { messages.map(message => {
+    return (
+      <div className='card onemessage card-message' key={message.id} onClick={() => showMessage(message.id)}>
+        <h5>User: {message.thread.toemail === user.email? message.thread.fromemail : message.thread.toemail}</h5>
+        <p>{message.thread.message}</p>
+      </div>
+    )
+  })}
       </div>
       <div>
-      <Thread activeMessage={activeMessage} messages={messages}/>
+          <Thread activeMessage={activeMessage} messages={messages} user={user}/>
       </div>
     </div>
     </>

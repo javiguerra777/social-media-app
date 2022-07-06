@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import { db, auth } from '../firebase/firebase-config';
-import {doc, updateDoc} from 'firebase/firestore';
+import { db } from '../firebase/firebase-config';
+import { doc, updateDoc } from 'firebase/firestore';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+
 const Edit = () => {
+  const user = useSelector((state)=> state.user);
   const {id} = useParams();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -18,7 +21,8 @@ const Edit = () => {
     const editpost = {
       title: title,
       body: body,
-      email: auth.currentUser.email
+      userid: user.uid,
+      useremail: user.email
     }
     await updateDoc(post, editpost);
     navigate('/home');
