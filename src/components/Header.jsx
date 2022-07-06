@@ -15,9 +15,9 @@ const Header = () => {
   return (
     <div>
     <nav className='d-flex flex-wrap py-3 mb-4 border-bottom'>
-    <button onClick={logout}>Logout</button>
-      <Link to='/home'>Home</Link>
+      <button onClick={logout}>Logout</button>
       <Link to='/media'>Media Posts</Link>
+      <Link to='/home'>Profile</Link>
       <Link to='/messages'>Messages</Link>
     </nav>
     </div>

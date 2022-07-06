@@ -20,7 +20,7 @@ const Post = () => {
       setDbData(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
     };
     getDbData();
-  }, [postsCollectionRef, id]);
+  }, [id]);
   useEffect(() => {
     const pData = dbData.find(data => data.id === id);
     setPost(pData);

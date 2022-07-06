@@ -1,12 +1,36 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { useState, useEffect } from 'react';
 import '../styles/media.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase/firebase-config';
 import { collection, getDocs } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
+import styled from 'styled-components';
+
+const MediaWrapper = styled.main`
+background-color: #B0B0B0;
+height: 85vh;
+overflow-y: scroll;
+display: flex;
+flex-direction: column;
+width: 100vw;
+.card {
+  margin-top: .5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  cursor:pointer;
+}
+.card:hover {
+  color: white;
+  background-color: black;
+}
+`;
 
 const Media = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const postsCollectionsRef = collection(db, 'posts');
   useEffect(()=> {
@@ -15,21 +39,23 @@ const Media = () => {
       setPosts(data.docs.map((doc)=> ({...doc.data(), id: doc.id})))
     }
     getPosts();
-  },[postsCollectionsRef]);
+  }, []);
+  
+  const viewPost = (id) => {
+    navigate(`../posts/${id}`)
+  }
   return (
-    <div>
+    <MediaWrapper>
       {posts.map((post)=> {
         return( 
-          <>
-          <div className='card' key={nanoid()}>
-            <h4>post made by: {post.username}</h4>
-            <h5>{post.title} <Link to={`../posts/${[post.id]}`} >View Post</Link> </h5>
+          <div className='card' onClick={()=> viewPost(post.id)} key={nanoid()}>
+            <h4>{post.username}</h4>
+            <h5>{post.title} </h5>
             <p>{post.body}</p>
           </div>
-          </>
         )
       })}
-    </div>
+    </MediaWrapper>
   )
 }
 

@@ -1,9 +1,24 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import CreatePost from '../components/CreatePost';
 import { Link } from 'react-router-dom';
 import { db } from '../firebase/firebase-config';
 import { getDocs, collection, deleteDoc, doc, where, query } from 'firebase/firestore';
 import { useSelector } from 'react-redux/es/exports';
-import {nanoid} from 'nanoid';
+import { nanoid } from 'nanoid';
+import styled from 'styled-components';
+
+const HomeWrapper = styled.main`
+background-color: #B0B0B0; 
+.card {
+  margin-top: .5em;
+}
+header {
+  background-color: white;
+  h1 {
+    text-align:center;
+  }
+}
+`;
 
 const Home = () => {
   const user = useSelector((state)=> state.user);
@@ -34,22 +49,22 @@ const Home = () => {
     
   }
   return (
-    <>
+    <HomeWrapper>
+      <header>
+        <h1>{user.name}</h1>
+         <CreatePost/>
+      </header>
       <div>
-        <h1>Home</h1>
-      </div>
-      <div>
-        <Link to='/newpost'>Create new post</Link>
       {posts.map((post)=> {
     return (
       <div className='card' key={nanoid()}>
-      <h5>{post.title} <Link to={`../edit/${[post.id]}`}>Edit Post</Link> <button onClick={()=> deletePost(post.id)} className='delete'>x</button></h5>
+      <h5>{post.title} <Link to={`../edit/${post.id}`}>Edit Post</Link> <button onClick={()=> deletePost(post.id)} className='delete'>x</button></h5>
       <p>{post.body}</p>
       </div>
     )
   })}
       </div>
-    </>
+    </HomeWrapper>
   )
 }
 
