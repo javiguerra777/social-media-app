@@ -11,7 +11,7 @@ background: rgb(100,95,175);
 background: linear-gradient(90deg, rgba(100,95,175,1) 22%, rgba(166,166,227,1) 52%, rgba(153,202,212,1) 88%);
 display: flex;
 flex-direction: column;
-align-items: center;
+align-items: flex-end;
 height: 100vh;
 width: 100vw;
 .bottom-container {
@@ -26,23 +26,31 @@ width: 100vw;
   align-items: center;
 }
 .signup-container {
-  background-color: #FFFAFA;
+  background-color: white;
   border-radius:.5em;
-  margin-top: 2em;
-  width: 75%;
-  height: auto;
+  width: 45%;
+  height: 100vh;
+}
+button {
+ width: 20vw;
+ background: rgb(100,95,175);
+background: linear-gradient(90deg, rgba(100,95,175,1) 22%, rgba(166,166,227,1) 52%, rgba(153,202,212,1) 88%);
+color: white;
+border-radius: 1em;
 }
 header {
   display: flex;
   justify-content: center;
-    h1 {
-      text-align: center;
+  margin-top: 3em;
+    h2 {
+      text-align: start;
       width: 90%;
   }
 }
 input {
-  background-color: #DCDCDC;
+  width: 30vw;
   border: none;
+  border-bottom: solid 1px gray;
 }
 `;
 
@@ -79,15 +87,16 @@ const Signup = () => {
     <SignupWrapper>
     <section className='signup-container'>
       <header>
-        <h1>Signup</h1>
+        <h2>Sign Up</h2>
       </header>
         <form className='form' onSubmit={createUser}>
           <section className='form-group'>
-            <label htmlFor="username">
+            <label htmlFor="name">
+              Full Name <br/>
             <input 
                 type='text'
-                id='username'
-                name='username'
+                id='name'
+                name='name'
                 placeholder='Name*'
                 className='form-control'
             onChange={(e)=> setName(e.target.value)}
@@ -96,6 +105,7 @@ const Signup = () => {
           </section>
           <section className='form-group'>
             <label htmlFor="email">
+              Email <br/>
             <input
                 type='email'
                 id='email'
@@ -108,6 +118,7 @@ const Signup = () => {
           </section>
           <section className='form-group'>
             <label htmlFor="password">
+              Password <br/>
             <input
             type='password'
             id='password'
@@ -118,12 +129,8 @@ const Signup = () => {
             />
         </label>
           </section>
-
-        
-        
-        
         <section className='btn-container'>
-        <Button style={{backgroundColor:"lightblue", color: "white"}} type="submit" disabled ={disabled}>Sign Up</Button>
+        <Button type="submit" disabled ={disabled}>Sign Up</Button>
         </section>
       </form>
       <hr />

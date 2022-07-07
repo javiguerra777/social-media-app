@@ -11,8 +11,9 @@ import styled from 'styled-components';
 
 const MediaWrapper = styled.main`
 background-color: #B0B0B0;
-height: 85vh;
-overflow-y: scroll;
+height: 80vh;
+overflow-x:hidden;
+overflow-y:scroll;
 display: flex;
 flex-direction: column;
 width: 100vw;

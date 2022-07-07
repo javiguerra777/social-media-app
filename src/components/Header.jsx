@@ -1,26 +1,21 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import '../styles/header.css';
-import { useDispatch } from 'react-redux/es/hooks/useDispatch';
-import { toggleLoggedIn, updateUser } from '../store/userSlice';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const HeaderWrapper = styled.nav`
+height: 3.5em;
+justify-content: space-around;
+`;
 
 const Header = () => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate();
-  const logout = async () => {
-    dispatch(toggleLoggedIn());
-    dispatch(updateUser("", 0, ""))
-    navigate('/');
-  };
+ 
   return (
-    <div>
-    <nav className='d-flex flex-wrap py-3 mb-4 border-bottom'>
-      <button onClick={logout}>Logout</button>
+    <HeaderWrapper className='d-flex flex-wrap py-3'>
       <Link to='/media'>Media Posts</Link>
       <Link to='/home'>Profile</Link>
       <Link to='/messages'>Messages</Link>
-    </nav>
-    </div>
+      <Link to='/menu'>Menu</Link>
+    </HeaderWrapper>
   )
 }
 

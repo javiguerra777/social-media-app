@@ -7,11 +7,15 @@ import Edit from './pages/Edit';
 import Media from './pages/Media';
 import Post from './pages/Post';
 import Messages from './pages/Messages';
+import Menu from './pages/Menu';
 import NotFound from './pages/NotFound';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import Newpost from './pages/Newpost';
-import { useSelector } from 'react-redux/es/exports';
-
+import { useSelector, useDispatch } from 'react-redux/es/exports';
+import { setAllUsers } from './store/dataSlice';
+import { useEffect } from 'react';
+import { db } from './firebase/firebase-config';
+import { collection, getDocs } from 'firebase/firestore';
 const ProtectedRoute = ({loggedin, children})=> {
   if(!loggedin){
     return <Navigate to="/" replace/>
@@ -19,7 +23,16 @@ const ProtectedRoute = ({loggedin, children})=> {
   return children;
 }
 function App() {
+  const dispatch = useDispatch();
   const loggedIn = useSelector((state) => state.user.loggedIn);
+  useEffect(() => {
+    const userCollectionRef = collection(db, 'users');
+    const getUsers = async () => {
+      const data = await getDocs(userCollectionRef);
+      dispatch(setAllUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))))
+    }
+    getUsers();
+  }, []);
   return (
     <Routes>
       <Route path='/' element={<Layout/>}>
@@ -48,6 +61,10 @@ function App() {
       <Route path="newpost" element={
       <ProtectedRoute loggedin={loggedIn}>
       <Newpost/>
+      </ProtectedRoute>} />
+      <Route path="menu" element={
+      <ProtectedRoute loggedin={loggedIn}>
+      <Menu />
       </ProtectedRoute>} />
       <Route path='*' element={<NotFound />}/>
       </Route>

@@ -6,13 +6,11 @@ import { useSelector } from 'react-redux/es/exports';
 import styled from 'styled-components';
 
 const NewPostWrapper = styled.main`
-background-color: #fffaf0;
 height: 85vh;
 width: 100vw;
 .above-post{
-  background-color: #fffaf0;
-  position: fixed;
-  top: 3em;
+  position: relative;
+  top: 0;
   width: 100%;
 }
 .exit {
@@ -36,7 +34,7 @@ header {
   position:fixed;
   top:0;
   z-index:2;
-  height: 3em;
+  height: 3.5em;
   width: 100%;
 }
 input {

@@ -9,11 +9,9 @@ import { nanoid } from 'nanoid';
 import styled from 'styled-components';
 
 const PostWrapper = styled.main`
-background-color: #fffaf0;
-height: 85vh;
+height: 75vh;
 width: 100vw;
 overflow-y:scroll;
-margin-bottom: 6em;
 .comment {
   position:relative;
 }
@@ -30,7 +28,7 @@ header {
   position:fixed;
   top:0;
   z-index:2;
-  height: 3em;
+  height: 3.5em;
   width: 100%;
 }
 `;
@@ -58,8 +56,8 @@ const Post = () => {
   
   const addComment = (e) => {
     e.preventDefault();
-    setComments((prev) => [...prev, { id: nanoid(), name: user.name, comment }])
-    setComment("")
+    setComments((prev) => [...prev, { id: nanoid(), name: user.name, comment }]);
+    setComment("");
   }
   return (
     <PostWrapper>
@@ -84,7 +82,7 @@ const Post = () => {
     </div>
     <form className='comment-form' onSubmit={addComment}>
     <label>
-    <Button style={{backgroundColor:'blue', color:'white'}} type='submit'> Add comment</Button>{' '}
+    <Button style={{backgroundColor:'blue', color:'white'}} type='submit' disabled={comment === ""}> Add comment</Button>{' '}
       <input
       placeholder='add comment here'
       value={comment}

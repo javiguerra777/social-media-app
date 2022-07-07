@@ -11,8 +11,8 @@ import { toggleLoggedIn, updateUser } from '../store/userSlice';
 import styled from 'styled-components';
 
 const LoginWrapper = styled.main`
-background: rgb(153,202,212);
-background: linear-gradient(90deg, rgba(153,202,212,1) 0%, rgba(155,197,214,1) 0%, rgba(187,186,195,1) 0%, rgba(162,178,222,1) 0%, rgba(28,92,230,1) 0%, rgba(199,199,226,1) 18%, rgba(168,168,225,1) 38%, rgba(167,167,226,1) 53%, rgba(166,166,227,1) 67%, rgba(4,79,230,1) 100%);
+background: rgb(225,225,242);
+background: linear-gradient(90deg, rgba(225,225,242,1) 7%, rgba(208,208,252,1) 33%, rgba(166,166,227,1) 58%, rgba(103,137,249,1) 73%, rgba(54,101,218,1) 87%, rgba(4,79,230,1) 100%);
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -31,6 +31,10 @@ background: linear-gradient(90deg, rgba(153,202,212,1) 0%, rgba(155,197,214,1) 0
 a {
  text-decoration: none;
 }
+button {
+  background-color: #d0d0fc;
+  color: white;
+}
 form{
   display: flex;
   flex-direction: column;
@@ -38,6 +42,7 @@ form{
 input {
   background-color: #DCDCDC;
   border: none;
+  width: 30vw;
 }
 `;
 const Login = () => {
@@ -111,7 +116,7 @@ const Login = () => {
         </label>
        </section>
        <div className='btn-container'>
-      <Button style={{backgroundColor: 'green', color: 'white'}} type='submit' disabled={disabled}>Login</Button>
+      <Button type='submit' disabled={disabled}>Login</Button>
       </div>
       </form>
       <hr/>
