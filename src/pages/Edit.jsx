@@ -69,37 +69,40 @@ const Edit = () => {
   }
   
   const updatePost= async ()=> {
-    // const editpost = {
-    //   title: title,
-    //   body: body,
-    //   userid: user.uid,
-    //   useremail: user.email
-    // }
-    // await updateDoc(post, editpost);
+    const editpost = {
+      title: title,
+      body: body,
+      userid: user.uid,
+      useremail: user.email
+    }
+    await updateDoc(post, editpost);
     navigate('/home');
   }
   return (
     <EditWrapper>
       <header>
-        <button className="exit" type="button" onClick={()=>navigate("/home")}>X</button>
+        <button className="exit" type="button" onClick={()=>navigate("/media")}>X</button>
         <h4>Edit Post</h4>
         <Button className='save-post' disabled={disabled} onClick={updatePost}>Save</Button>
       </header>
-      <section className='form'>
-        <label htmlFor="newtitle">
-          Edit title:
+      <section className='above-post'>
+        <p><strong>{user.name}</strong></p>
+      </section>
+      <section className='form container-fluid'>
+        <label htmlFor="edittitle">
+          Edit title*
           <input
           type='text'
-          id='newtitle'
+          id='edittitle'
           value={title}
           onChange={(e)=> setTitle(e.target.value)}
           />
         </label>
-        <label htmlFor="newbody">
-          Edit body:
+        <label htmlFor="editbpdy">
+          Edit body*
           <textarea
           type='text'
-          id='newbody'
+          id='editbody'
           value={body}
           onChange={(e)=> setBody(e.target.value)}
           ></textarea>  

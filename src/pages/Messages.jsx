@@ -6,6 +6,13 @@ import { setSuggestions } from '../store/searchSlice';
 import styled from 'styled-components';
 import SearchBar from '../components/SearchBar';
 const MessageWrapper = styled.main`
+
+.first-header {
+  display:flex;
+}
+.nomessages {
+  text-align:center;
+}
 `;
 
 export const Messages = () => {
@@ -20,18 +27,19 @@ export const Messages = () => {
     setActiveMessage(id);
   }
   const suggestionHandler = (text) => {
+    console.log(text)
     setSearchInput(text);
     dispatch(setSuggestions([]));
   }
-  const searchForUser = () => {
-    setSearchInput("");
-    dispatch(setSuggestions([]))
-  }
+  // const searchForUser = () => {
+  //   setSearchInput("");
+  //   dispatch(setSuggestions([]))
+  // }
   return (
     <MessageWrapper>
-      <header>
+      <header className='first-header'>
         <SearchBar userInput={searchInput} searchFunc={setSearchInput} />
-        <button type='button' onClick={searchForUser}>Start Conversation</button>
+        {/* <button type='button' onClick={searchForUser}>Start Conversation</button> */}
       </header>
       {suggestions && suggestions.map((sug, i) => {
         return (
@@ -41,8 +49,8 @@ export const Messages = () => {
         )
       })}
       {messages.length === 0 ? (
-        <section>
-          <p>start conversation</p>
+        <section className='nomessages'>
+          <p>No messages, start a conversation!</p>
         </section>
       ) : (
           <div className='messages-container'>

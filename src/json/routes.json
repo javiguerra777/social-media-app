@@ -1,0 +1,18 @@
+[
+  {
+    "to": "/media",
+    "desc": "Media "
+  },
+  {
+    "to": "/home",
+    "desc": "Profile"
+  },
+  {
+    "to": "/messages",
+    "desc": "Messages"
+  },
+  {
+    "to": "/menu",
+    "desc": "Menu"
+  }
+]

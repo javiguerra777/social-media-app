@@ -6,7 +6,12 @@ import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
 
 const MenuWrapper = styled.main`
+display: flex;
+flex-direction: column;
+align-items: center;
 button {
+  background-color: #F0F0F0;
+  width: 80%
 }
 `;
 const Menu = () => {

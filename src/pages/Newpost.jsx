@@ -75,19 +75,19 @@ const Newpost = () => {
       username: user.name
     }
     addDoc(postCollection,newPost);
-    navigate('/home');
+    navigate('/media');
   }
   return (
     <NewPostWrapper>
       <header>
-        <button className="exit" type="button" onClick={()=>navigate("/home")}>X</button>
+        <button className="exit" type="button" onClick={()=>navigate("/media")}>X</button>
         <h4>Create Post</h4>
         <button className="submit-post" disabled={disabled} type='button' onClick={createNewPost}>Post</button>
       </header>
       <section className='above-post'>
         <p><strong>{user.name}</strong></p>
       </section>
-    <section className='form'>
+    <section className='form container-fluid'>
           <label htmlFor='title'>
             <input
             type='text'
@@ -104,8 +104,7 @@ const Newpost = () => {
             id='body'
             name='body'
             placeholder="What's on your mind?"
-            rows="15"
-            cols="100vw"
+            rows="5"
             value={body}
             onChange={(e)=> setBody(e.target.value)}
             ></textarea>

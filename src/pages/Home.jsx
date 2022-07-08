@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import CreatePost from '../components/CreatePost';
-import { Link } from 'react-router-dom';
 import { Accordion } from 'react-bootstrap';
+import Posts from '../components/Posts';
 import { db } from '../firebase/firebase-config';
 import { getDocs, collection, deleteDoc, doc, where, query } from 'firebase/firestore';
 import { useSelector } from 'react-redux/es/exports';
-import { nanoid } from 'nanoid';
 import styled from 'styled-components';
-import Options from '../components/Options';
 
 const HomeWrapper = styled.main`
-background-color: #B0B0B0;
-height: 80vh; 
+background-color: #ebeef0;
+height: 88vh; 
+width: 100vw;
 overflow-x: hidden;
 overflow-y: scroll;
+display: flex;
+flex-direction: column;
+align-items:center;
+padding-bottom: 1em;
 .card {
   margin-top: .5em;
+  width: 100%;
   header {
     display:flex;
     justify-content:space-between;
@@ -23,6 +27,7 @@ overflow-y: scroll;
 }
 .main-header {
   background-color: white;
+  width: 100%;
   h1 {
     text-align:center;
   }
@@ -39,43 +44,19 @@ const Home = () => {
       const userPosts = [];
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
-        userPosts.push(doc.data());
+        userPosts.push({...doc.data(), id: doc.id});
       });
       setPosts(userPosts);
     }
     getData();
-  },[user.uid]);
-  const deletePost = async (id) => {
-    try {
-    // const postRef = doc(db, 'posts', id);
-    // await deleteDoc(postRef);
-
-    const remainingPosts = posts.filter((post)=> post.id !== id);
-    setPosts(remainingPosts);
-    }catch(err){
-      console.log(err)
-    } 
-  }
+  }, [user.uid]);
   return (
-    <HomeWrapper>
+    <HomeWrapper className='webkit'>
       <header className='main-header'>
         <h1>{user.name}</h1>
          <CreatePost/>
       </header>
-      <div>
-      {posts.map((post)=> {
-    return (
-      <div className='card' key={nanoid()}>
-        <header>
-          <p>{post.username}</p>
-          <Options deletePost={deletePost} post={post}/>
-        </header>
-      <h5>{post.title}</h5>
-      <p>{post.body}</p>
-      </div>
-    )
-  })}
-      </div>
+      <Posts data={posts} setPosts={setPosts} />
     </HomeWrapper>
   )
 }

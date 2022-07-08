@@ -3,3 +3,13 @@
   align-self: center;
 }
 
+.webkit {
+  /* Internet Explorer 10+ */
+  -ms-overflow-style: none;
+  /* Firefox */
+    scrollbar-width: none;  
+}
+.webkit::-webkit-scrollbar {
+  /* Safari and Chrome */
+  display: none;
+}

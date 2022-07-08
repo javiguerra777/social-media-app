@@ -6,6 +6,7 @@ import { collection, doc, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux/es/exports';
 import { nanoid } from 'nanoid';
+import {IoIosArrowBack} from 'react-icons/io'
 import styled from 'styled-components';
 
 const PostWrapper = styled.main`
@@ -17,9 +18,9 @@ overflow-y:scroll;
 }
 .comment-form {
   position: fixed;
-  bottom: 3em;
+  bottom: 5vh;
 }
-header {
+.top-page {
   background-color: #333333;
   color: white;
   display: flex;
@@ -30,6 +31,15 @@ header {
   z-index:2;
   height: 3.5em;
   width: 100%;
+  .left-content {
+    display:flex;
+    }
+  button {
+    background:none;
+    border: none;
+    color: white;
+    margin-right: 1em;
+  }
 }
 `;
 const Post = () => {
@@ -60,10 +70,12 @@ const Post = () => {
     setComment("");
   }
   return (
-    <PostWrapper>
-      <header>
-        <button onClick={()=> navigate('/home')} type="button">arrow home</button>
-        <h4>{post.username}</h4>
+    <PostWrapper className='webkit'>
+      <header className='top-page'>
+        <section className='left-content'>
+          <button onClick={()=> navigate('/media')} type="button"><IoIosArrowBack/></button>
+          <h5>{post.username}</h5>
+        </section>
       </header>
       <div className='comment'>
       <h5>{post.title}</h5>
@@ -84,7 +96,7 @@ const Post = () => {
     <label>
     <Button style={{backgroundColor:'blue', color:'white'}} type='submit' disabled={comment === ""}> Add comment</Button>{' '}
       <input
-      placeholder='add comment here'
+      placeholder='Write a comment...'
       value={comment}
       onChange={(e)=> setComment(e.target.value)} 
       required
