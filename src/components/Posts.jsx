@@ -3,8 +3,8 @@ import Options from './Options';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase/firebase-config';
-import { getDocs, collection, deleteDoc, doc} from 'firebase/firestore';
-
+import { deleteDoc, doc} from 'firebase/firestore';
+import { Accordion } from 'react-bootstrap';
 import { nanoid } from 'nanoid';
 import { BsHandThumbsUp } from 'react-icons/bs';
 import { BiMessageAlt } from 'react-icons/bi';
@@ -16,14 +16,24 @@ const PostsWrapper = styled.section`
   margin-top: .5em;
   display: flex;
   flex-direction: column;
+  img {
+    width: 3em;
+    height: 3em;
+    margin-right: .5em;
+    border-radius: 3em;
+  }
   header {
     display:flex;
     justify-content:space-between;
+    section{
+      display:flex;
+    }
   }
   footer {
-    width: 90%;
+    width: 97%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    align-self:center;
     border-top: gray 1px solid;
     button{ 
       width: 33%;
@@ -69,14 +79,16 @@ const Posts = ({ data, setPosts }) => {
         return (
           <section className='card' key={nanoid()}>
             <header>
-              <h5>{post.username}</h5>
+              <section className='container-fluid'>
+                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile picture"/>
+                <h5>{post.username}</h5>
+              </section>
               {user.uid === post.userid && <Options post={post} deletePost={deletePost}/>}
             </header>
-            <div className='main-content' onClick={() => viewPost(post.id)}>
+            <section className=' container-fluid main-content' onClick={() => viewPost(post.id)}>
               <h5>{post.title} </h5>
               <p>{post.body}</p>
-            </div>            
-            <hr/>
+            </section>            
             <footer>
               <button><BsHandThumbsUp /> Like</button>
               <button onClick={()=> viewPost(post.id)}><BiMessageAlt /> Comment</button>

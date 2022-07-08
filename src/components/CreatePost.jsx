@@ -37,27 +37,31 @@ width: 100%;
 .panel-body {
     padding: 25px 20px;
 }
-input {
+textarea {
   cursor:pointer;
   width: 100%;
   border:none;
+  resize:none;
 }
 `;
 
 const CreatePost = () => {
   const navigate = useNavigate();
+  const toNewPost = () => {
+    navigate('/newpost')
+  }
   return (
     <Wrapper className='panel'>
       <section className='panel-body'>
-        <textarea disabled={true} class="form-control" rows="2" placeholder="What are you thinking?"></textarea>
-        <section class="mar-top">
+        <textarea onClick={toNewPost} class="form-control" rows="1" placeholder="What's on your mind?"></textarea>
+        <section className="mar-top">
           <section>
-            <button onClick ={()=>navigate('/newpost')} className="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-pencil fa-fw"></i><BsFillPencilFill/> Share</button>
+            <button onClick ={toNewPost} className="btn btn-sm btn-primary pull-right" type="submit"><i ></i><BsFillPencilFill/> Share</button>
           </section>	
           <section className='tooltips'>
-        			<button className="btn btn-trans btn-icon fa fa-video-camera add-tooltip" href="#" data-original-title="Add Video" data-toggle="tooltip"><AiOutlineVideoCameraAdd/></button>
-        			<button class="btn btn-trans btn-icon fa fa-camera add-tooltip" href="#" data-original-title="Add Photo" data-toggle="tooltip"><AiFillCamera/></button>
-        			<button class="btn btn-trans btn-icon fa fa-file add-tooltip" href="#" data-original-title="Add File" data-toggle="tooltip"><AiFillFileText/></button>
+        			<button className="btn btn-trans btn-icon add-tooltip" href="#" data-original-title="Add Video" data-toggle="tooltip"><AiOutlineVideoCameraAdd/></button>
+        			<button className="btn btn-trans btn-icon add-tooltip" href="#" data-original-title="Add Photo" data-toggle="tooltip"><AiFillCamera/></button>
+        			<button className="btn btn-trans btn-icon  add-tooltip" href="#" data-original-title="Add File" data-toggle="tooltip"><AiFillFileText/></button>
               </section>
         </section>
       </section>

@@ -49,6 +49,7 @@ input {
 textarea {
   width: 100%;
   max-width: 100%;
+  resize:none;
 }
 button {
   height: 75%;
@@ -93,7 +94,7 @@ const Newpost = () => {
             type='text'
             id='title'
             name='title'
-            placeholder='description of post'
+            placeholder='Title'
             value={title}
             onChange={(e)=> setTitle(e.target.value)}
             />

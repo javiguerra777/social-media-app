@@ -6,7 +6,9 @@ import store from './store';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+/*
+photo credits to cdn.pixabay.com for the use of the blank profile picture
+*/
 const root = createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

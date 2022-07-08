@@ -50,6 +50,7 @@ input {
 textarea {
   width: 100%;
   max-width: 100%;
+  resize:none;
 }
 button {
   height: 75%;
