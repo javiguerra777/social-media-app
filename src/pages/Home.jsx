@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const HomeWrapper = styled.main`
 background-color: #ebeef0;
-height: 88vh; 
+height: 93vh; 
 width: 100vw;
 overflow-x: hidden;
 overflow-y: scroll;
@@ -83,8 +83,8 @@ const Home = () => {
     <HomeWrapper className='webkit'>
       <header className='main-header'>
         <section className='image-container'>
-        <img id="header-image" src="https://toppng.com/uploads/preview/cool-backgrounds-hd-11553722962xmab2pqpcv.jpg" />
-        <img id="profile-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile picture"/>
+        <img id="header-image" src="https://toppng.com/uploads/preview/cool-backgrounds-hd-11553722962xmab2pqpcv.jpg" alt="header-pic" />
+        <img id="profile-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile-pic"/>
         </section>
       </header>
       <section className='body-content'>

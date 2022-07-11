@@ -28,10 +28,11 @@ width: 100vw;
 .signup-container {
   background-color: white;
   border-radius:.5em;
-  width: 45%;
+  width: 25%;
   height: 100vh;
 }
 button {
+  margin-top: 1em;
  width: 20vw;
  background: rgb(100,95,175);
 background: linear-gradient(90deg, rgba(100,95,175,1) 22%, rgba(166,166,227,1) 52%, rgba(153,202,212,1) 88%);
@@ -48,9 +49,25 @@ header {
   }
 }
 input {
-  width: 30vw;
+  width: auto;
   border: none;
   border-bottom: solid 1px gray;
+}
+
+@media (max-width: 1000px){
+  .signup-container {
+    width: 35%;
+  }
+}
+@media (max-width: 800px){
+  .signup-container {
+    width: 45%;
+  }
+}
+@media (max-width: 600px){
+  .signup-container {
+    width: 55%;
+  }
 }
 `;
 
@@ -136,7 +153,7 @@ const Signup = () => {
       <hr />
       <section className='bottom-container'>
         <p>Already have an account?</p>
-        <Link to='/'>Sign In</Link>
+        <Link className="btn btn-secondary" to='/'>Sign In</Link>
         </section>
     </section>
     </SignupWrapper>

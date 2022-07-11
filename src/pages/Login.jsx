@@ -24,16 +24,17 @@ background: linear-gradient(90deg, rgba(225,225,242,1) 7%, rgba(208,208,252,1) 3
   display: flex;
   flex-direction: column;
   align-items:center;
-  width: 75%;
+  width: 45%;
   padding-bottom: 10px;
   margin-top: 3em;
 }
 a {
  text-decoration: none;
 }
-button {
+button:disabled {
   background-color: #d0d0fc;
   color: white;
+  border: none;
 }
 form{
   display: flex;
@@ -43,6 +44,15 @@ input {
   background-color: #DCDCDC;
   border: none;
   width: 30vw;
+  margin-bottom: 1em;
+}
+@media (max-width: 800px){
+  .form-container {
+    width: 65%;
+  }
+  input {
+    width: 50vw;
+  }
 }
 `;
 const Login = () => {
@@ -121,7 +131,7 @@ const Login = () => {
       </form>
       <hr/>
       <section>
-        <p>Don't have an account? <span><Link to="/signup">Signup</Link></span></p>
+        <p>Don't have an account? <span><Link className="btn btn-secondary" to="/signup">Sign Up</Link></span></p>
       </section>
       </section>
     </LoginWrapper>

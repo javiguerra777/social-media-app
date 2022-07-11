@@ -5,7 +5,7 @@ import {BsFillPencilFill} from 'react-icons/bs'
 import { AiOutlineVideoCameraAdd, AiFillCamera, AiFillFileText } from 'react-icons/ai';
 const Wrapper = styled.section`
 background-color: white;
-width: 100%;
+width: 100vw;
 .mar-top {
   display: flex;
   flex-direction: row-reverse;
@@ -53,7 +53,7 @@ const CreatePost = () => {
   return (
     <Wrapper className='panel'>
       <section className='panel-body'>
-        <textarea onClick={toNewPost} class="form-control" rows="1" placeholder="What's on your mind?"></textarea>
+        <textarea onClick={toNewPost} className="form-control" rows="1" placeholder="What's on your mind?"></textarea>
         <section className="mar-top">
           <section>
             <button onClick ={toNewPost} className="btn btn-sm btn-primary pull-right" type="submit"><i ></i><BsFillPencilFill/> Share</button>

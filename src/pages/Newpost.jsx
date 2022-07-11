@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux/es/exports';
 import styled from 'styled-components';
 
 const NewPostWrapper = styled.main`
-height: 85vh;
+height: 93vh;
 width: 100vw;
 .above-post{
   position: relative;
@@ -16,7 +16,6 @@ width: 100vw;
 .exit {
   background:transparent;
   border: none;
-  color: white;
 }
 .submit-post {
   background-color: #6495ED;
@@ -26,12 +25,9 @@ width: 100vw;
   margin-right: .2em;
 }
 header {
-  background-color: #333333;
-  color: white;
   display: flex;
   justify-content:space-between;
   align-items: center;
-  position:fixed;
   top:0;
   z-index:2;
   height: 3.5em;
@@ -39,6 +35,7 @@ header {
 }
 input {
   width: 100%;
+  margin-bottom: 1em;
 }
 .form {
   position:relative;
@@ -73,7 +70,8 @@ const Newpost = () => {
       body:body,
       userid: user.uid,
       useremail: user.email,
-      username: user.name
+      username: user.name,
+      date: Date.now()
     }
     addDoc(postCollection,newPost);
     navigate('/media');

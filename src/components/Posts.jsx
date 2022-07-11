@@ -10,8 +10,28 @@ import { BsHandThumbsUp } from 'react-icons/bs';
 import { BiMessageAlt } from 'react-icons/bi';
 import { TiArrowForwardOutline } from 'react-icons/ti';
 import styled from 'styled-components';
-
+import { convertUnix } from '../utils/functions';
 const PostsWrapper = styled.section`
+.accordion {
+  a {
+    text-decoration: none;
+    color: black;
+  }
+  button {
+    border: none;
+    background: none;
+  }
+  .non-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30vw;
+  }
+}
+.accordion-button, .accordion-item, .accordion-header {
+  border: none;
+  background:none;
+}
 .card {
   margin-top: .5em;
   display: flex;
@@ -34,7 +54,7 @@ const PostsWrapper = styled.section`
     display: flex;
     justify-content: center;
     align-self:center;
-    border-top: gray 1px solid;
+    border-top: #e5e4e2 1px solid;
     button{ 
       width: 33%;
       background: none;
@@ -45,6 +65,10 @@ const PostsWrapper = styled.section`
 .card:hover {
   -webkit-box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 15px 0px #000000, 5px 5px 37px 5px rgba(0,0,0,0); 
   box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 15px 0px #000000, 5px 5px 37px 5px rgba(0,0,0,0);
+}
+.date {
+  color: gray;
+  font-size: .7em;
 }
 .main-content {
   cursor:pointer;
@@ -80,10 +104,26 @@ const Posts = ({ data, setPosts }) => {
           <section className='card' key={nanoid()}>
             <header>
               <section className='container-fluid'>
-                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile picture"/>
-                <h5>{post.username}</h5>
+                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile-pic"/>
+                <h5>
+                  {post.username} <br />
+                  <span className='date'>{convertUnix(post.date)}</span>
+                </h5>
               </section>
-              {user.uid === post.userid && <Options post={post} deletePost={deletePost}/>}
+              <Accordion>
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header></Accordion.Header>
+                  <Accordion.Body>
+                    {user.uid === post.userid ? (
+                      <Options post={post} deletePost={deletePost} />)
+                      :(
+                        <section className='non-user'>
+                          <button type="button">Hide Post</button>
+                      </section>
+                    )}
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
             </header>
             <section className=' container-fluid main-content' onClick={() => viewPost(post.id)}>
               <h5>{post.title} </h5>

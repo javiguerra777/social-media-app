@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { db } from '../firebase/firebase-config';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import styled from 'styled-components';
 
 const EditWrapper = styled.main`
-height: 85vh;
+height: 93vh;
 width: 100vw;
 .above-post{
   position: relative;
@@ -17,7 +17,6 @@ width: 100vw;
 .exit {
   background:transparent;
   border: none;
-  color: white;
 }
 .save-post {
   background-color: #6495ED;
@@ -27,12 +26,9 @@ width: 100vw;
   margin-right: .2em;
 }
 header {
-  background-color: #333333;
-  color: white;
   display: flex;
   justify-content:space-between;
   align-items: center;
-  position:fixed;
   top:0;
   z-index:2;
   height: 3.5em;
@@ -58,12 +54,31 @@ button {
 `;
 
 const Edit = () => {
+  const navigate = useNavigate();
   const user = useSelector((state)=> state.user);
-  const {id} = useParams();
+  const { id } = useParams();
+  const [userPost, setUserPost] = useState({});
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const post = doc(db, 'posts', id);
-  const navigate = useNavigate();
+  const [dbData, setDbData] = useState([post])
+  const postsCollectionsRef = collection(db, 'posts');
+  
+  useEffect(() => { 
+    const getDbData = async () => {
+      const data = await getDocs(postsCollectionsRef);
+      setDbData(data.docs.map((doc)=> ({...doc.data(), id:doc.id})))
+    }
+    getDbData();
+  }, [id]);
+
+  useEffect(() => {
+    const pData = dbData.find(data => data.id === id);
+    setUserPost(pData);
+    setTitle(pData.title);
+    setBody(pData.body);
+  }, [dbData, id]);
+
   let disabled = false;
   if(!title || !body){
     disabled = true;
@@ -71,10 +86,10 @@ const Edit = () => {
   
   const updatePost= async ()=> {
     const editpost = {
+      ...userPost,
       title: title,
       body: body,
-      userid: user.uid,
-      useremail: user.email
+      date: Date.now()
     }
     await updateDoc(post, editpost);
     navigate('/home');

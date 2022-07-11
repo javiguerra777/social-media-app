@@ -5,8 +5,9 @@ import { useSelector, useDispatch } from 'react-redux/es/exports';
 import { setSuggestions } from '../store/searchSlice';
 import styled from 'styled-components';
 import SearchBar from '../components/SearchBar';
+import { useEffect } from 'react';
 const MessageWrapper = styled.main`
-
+height: 93vh;
 .first-header {
   display:flex;
 }
@@ -35,6 +36,9 @@ export const Messages = () => {
   //   setSearchInput("");
   //   dispatch(setSuggestions([]))
   // }
+  useEffect(() => {
+    dispatch(setSuggestions([]))
+  }, [])
   return (
     <MessageWrapper>
       <header className='first-header'>

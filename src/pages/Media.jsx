@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const MediaWrapper = styled.main`
 background-color: #ebeef0;
-height: 88vh;
+height: 93vh;
 overflow-x:hidden;
 overflow-y:scroll;
 display: flex;

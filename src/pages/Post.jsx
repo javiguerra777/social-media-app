@@ -11,9 +11,10 @@ import { BiMessageAlt } from 'react-icons/bi';
 import { TiArrowForwardOutline } from 'react-icons/ti';
 import {IoIosArrowBack} from 'react-icons/io'
 import styled from 'styled-components';
+import { convertUnix } from '../utils/functions';
 
 const PostWrapper = styled.main`
-height: 75vh;
+height: 93vh;
 width: 100vw;
 overflow-y:scroll;
  img {
@@ -22,15 +23,17 @@ overflow-y:scroll;
     margin-right: .5em;
     border-radius: 3em;
   }
+  .body-container {
+  position: relative;
+  top: 3.5em;
+  }
 .comment {
-  position:relative;
-  top: 1px;
   display:flex;
   flex-direction: column;
   footer{
     align-self:center;
-    border-top: gray 1px solid;
-    border-bottom: gray 1px solid;
+    border-top: #e5e4e2 1px solid;
+    border-bottom: #e5e4e2 1px solid;
     width: 98%;
     button {
       width: 33%;
@@ -39,25 +42,51 @@ overflow-y:scroll;
     }
   }
 }
+.com-container {
+  display: flex;
+  flex-direction: row;
+}
+.comment-foot {
+  display: flex;
+  flex-direction: row;
+  margin-left: 2.9em;
+  button {
+    border:none;
+    background:none;
+  }
+}
 .comments {
   display: flex;
+  flex-direction: column;
   margin-left: .5em;
   margin-top: .5em;
 }
 .comment-form {
+  background-color: #f5f5f5;
   position: fixed;
-  bottom: 5vh;
+  bottom: 7vh;
+}
+.date {
+  color: gray;
+  font-size: .7em;
+}
+.item {
+  display: flex;
+  flex-direction: row;
+  width: 20vw;
+  justify-content: space-evenly;
+  font-size: .8em;
 }
 .thecomment {
   background-color: #F0F0F0;
   min-width: auto;
   max-width: 80%;
   border-radius: 1em;
+  word-wrap: break-word;
 
 }
 .top-page {
-  background-color: #333333;
-  color: white;
+  background-color: #f5f5f5;
   display: flex;
   justify-content:space-between;
   align-items: center;
@@ -72,7 +101,6 @@ overflow-y:scroll;
   button {
     background:none;
     border: none;
-    color: white;
     margin-right: 1em;
   }
 }
@@ -94,28 +122,37 @@ const Post = () => {
     };
     getDbData();
   }, [id]);
+
   useEffect(() => {
     const pData = dbData.find(data => data.id === id);
     setPost(pData);
   }, [dbData, id]);
+
   useEffect(() => {
     setComments(post.comments)
   }, [post])
+
   const addComment = (e) => {
     e.preventDefault();
-    setComments((prev) => [...prev, { id: nanoid(), username: user.name, comment }]);
+    setComments([...comments, { id: nanoid(), username: user.name, comment, date: Date.now() }]);
     setComment("");
   }
-  console.log(comments);
+  const mentionUser = (user) => {
+    setComment(`@${user}`)
+  }
+
   return (
     <PostWrapper className='webkit'>
       <header className='top-page'>
         <section className='left-content'>
           <button onClick={() => navigate('/media')} type="button"><IoIosArrowBack /></button>
-          <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile picture"/>
-          <h5>{post.username}</h5>
+          <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="user-pic"/>
+          <h5>{post.username} <br />
+            <span className='date'>{convertUnix(post.date)}</span>
+          </h5>
         </section>
       </header>
+      <section className='body-container'>
       <section className='comment'>
         <section className='container-fluid'>
           <h5>{post.title}</h5>
@@ -131,14 +168,24 @@ const Post = () => {
       {comments?.map(comment => {
         return (
           <section className='comments' key={comment.id}>
-            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile picture"/>
-            <section className='thecomment'>
-            <h5>{comment.username}</h5>
-            <p>{comment.comment}</p>
+            <section className='com-container'>
+              <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile-pic"/>
+              <section className='thecomment'>
+              <h5>{comment.username}</h5>
+                <p>{comment.comment}</p>
+              </section>
+            </section>
+            <section className='comment-foot'>
+              <section className='item'>
+                <p>{convertUnix(comment.date)}</p>
+              <div type="button">Like</div>
+              <div type="button" onClick={()=>mentionUser(comment.username)}>Reply</div>
+              </section>
             </section>
           </section>
     )
   })}
+        </section>
     </section>
     <form className='comment-form' onSubmit={addComment}>
     <label>
