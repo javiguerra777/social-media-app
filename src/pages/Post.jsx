@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { db } from '../firebase/firebase-config';
-import { collection, doc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDocs, addDoc, query, where } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux/es/exports';
 import { nanoid } from 'nanoid';
@@ -112,14 +112,16 @@ overflow-y:scroll;
 `;
 const Post = () => {
   const navigate = useNavigate();
-  const user = useSelector((state)=> state.user)
+  const commentCollectionRef = collection(db, 'comments');
+  const { user } = useSelector((state) => state);
   const [post, setPost] = useState([]);
-  const {id} = useParams();
+  const { id } = useParams();
   const [comment, setComment] = useState('');
   const thePost = doc(db, 'posts', id);
   const [dbData, setDbData] = useState([thePost]);
   const postsCollectionRef = collection(db, "posts");
   const [comments, setComments] = useState([]);
+
   useEffect(() => {
     const getDbData = async () => {
       const data = await getDocs(postsCollectionRef);
@@ -134,20 +136,34 @@ const Post = () => {
   }, [dbData, id]);
 
   useEffect(() => {
-    if (post.comments) {
-      setComments(post.comments)
+    const q = query(commentCollectionRef, where("postid", "==", id));
+    const getComments = async () => {
+      const comments = []; 
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        comments.push({...doc.data(), id: doc.id})
+      });
+      setComments(comments);
     }
-  }, [post])
+    getComments();
+  }, [])
 
-  const addComment = (e) => {
+  const addComment = async (e) => {
     e.preventDefault();
-    setComments([...comments, { id: nanoid(), username: user.name, comment, date: Date.now(), profilepic: user.profilepic }]);
+    const newComment = {
+      username: user.name,
+      comment,
+      date: Date.now(),
+      profilepic: user.profilepic,
+      postid: post.id
+    }
+    await addDoc(commentCollectionRef, newComment)
+    setComments([...comments, newComment]);
     setComment("");
   }
   const mentionUser = (user) => {
     setComment(`@${user}`)
   }
-  console.log(comments);
   return (
     <PostWrapper className='webkit'>
       <header className='top-page'>

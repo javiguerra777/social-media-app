@@ -63,7 +63,7 @@ const Newpost = () => {
   if(!title || !body){
     disabled = true;
   }
-  const createNewPost =(e)=> {
+  const createNewPost = async (e)=> {
     e.preventDefault();
     const newPost = {
       title:title,
@@ -74,7 +74,7 @@ const Newpost = () => {
       date: Date.now(),
       profilepic: user.profilepic
     }
-    addDoc(postCollection,newPost);
+   await addDoc(postCollection,newPost);
     navigate('/media');
   }
   return (
