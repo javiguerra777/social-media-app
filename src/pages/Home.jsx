@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux/es/exports';
+import { toggleDisplayFooter } from '../store/userSlice';
 import CreatePost from '../components/CreatePost';
 import Posts from '../components/Posts';
 import { db } from '../firebase/firebase-config';
 import { getDocs, collection, where, query } from 'firebase/firestore';
 import { useSelector } from 'react-redux/es/exports';
 import styled from 'styled-components';
+import { BsThreeDots, BsFillPlusCircleFill, BsPencilFill } from 'react-icons/bs';
 
 const HomeWrapper = styled.main`
 background-color: #ebeef0;
@@ -15,6 +19,20 @@ overflow-y: scroll;
 display: flex;
 flex-direction: column;
 align-items:center;
+.buttons {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-bottom: solid 1px #e5e4e2;
+  button {
+    margin-right: .5em;
+    margin-bottom: 1em;
+    border: none;
+    border-radius: .5em;
+    padding: .5em;
+  }
+}
 .card {
   margin-top: .5em;
   width: 100%;
@@ -64,7 +82,10 @@ align-items:center;
 `;
 
 const Home = () => {
-  const user = useSelector((state)=> state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const [userHome, setUserHome] = useState({});
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     const postsCollectionsRef = collection(db, 'posts');
@@ -79,17 +100,38 @@ const Home = () => {
     }
     getData();
   }, [user.uid]);
+
+  useEffect(() => {
+    const userCollectionRef = collection(db, 'users');
+    const q = query(userCollectionRef, where("id", "==", user.uid));
+    const getUserData = async () => {
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setUserHome(doc.data());
+      });
+    };
+    getUserData();
+  }, [user.uid]);
+  const editProfileDetails = () => {
+    dispatch(toggleDisplayFooter());
+    navigate('../editprofile');
+  }
   return (
     <HomeWrapper className='webkit'>
       <header className='main-header'>
         <section className='image-container'>
         <img id="header-image" src="https://toppng.com/uploads/preview/cool-backgrounds-hd-11553722962xmab2pqpcv.jpg" alt="header-pic" />
-        <img id="profile-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile-pic"/>
+        <img id="profile-image" src={`${userHome.profilepic}`} alt="profile-pic"/>
         </section>
       </header>
       <section className='body-content'>
         <section className='profile-details'>
-          <h3>{user.name}</h3>
+          <h3>{userHome.name}</h3>
+        </section>
+        <section className='buttons'>
+          <button type='button' style={{color:"white", backgroundColor:"#0d6efd"}}><BsFillPlusCircleFill/> Add to story</button>
+          <button type='button' onClick={editProfileDetails}><BsPencilFill/> Edit Profile</button>
+          <button type='button'><BsThreeDots/></button>
         </section>
       <CreatePost/>
       <Posts data={posts} setPosts={setPosts} />

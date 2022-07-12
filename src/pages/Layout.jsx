@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux/es/exports';
 const Layout = () => {
   const user = useSelector((state)=> state.user);
   return (
-    <>
+    <main>
       <Outlet/>
-      {user.loggedIn && <Footer />}
-    </>
+      {user.loggedIn && user.displayFooter && <Footer />}
+    </main>
   )
 }
 

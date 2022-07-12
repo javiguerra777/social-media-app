@@ -8,6 +8,7 @@ import Media from './pages/Media';
 import Post from './pages/Post';
 import Messages from './pages/Messages';
 import Menu from './pages/Menu';
+import EditProfile from './pages/EditProfile';
 import NotFound from './pages/NotFound';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import Newpost from './pages/Newpost';
@@ -39,33 +40,45 @@ function App() {
       <Route index element = {<Login />} />
       <Route path='signup' element={<Signup />} />
       <Route path='home' element={
-      <ProtectedRoute loggedin={loggedIn}>
-      <Home />
-      </ProtectedRoute>} />
+        <ProtectedRoute loggedin={loggedIn}>
+        <Home />
+        </ProtectedRoute>}
+      />
       <Route path='edit/:id' element={
-      <ProtectedRoute loggedin={loggedIn}>
-      <Edit/>
-      </ProtectedRoute>}/>
+        <ProtectedRoute loggedin={loggedIn}>
+        <Edit/>
+        </ProtectedRoute>}
+      />
       <Route path='media' element={
-      <ProtectedRoute loggedin={loggedIn}>
-      <Media/>
-      </ProtectedRoute>}/>
+        <ProtectedRoute loggedin={loggedIn}>
+        <Media/>
+        </ProtectedRoute>}
+      />
       <Route path='posts/:id' element={
-      <ProtectedRoute loggedin={loggedIn}>
-      <Post />
-      </ProtectedRoute>} />
+        <ProtectedRoute loggedin={loggedIn}>
+        <Post />
+        </ProtectedRoute>}
+      />
       <Route path="messages" element={
-      <ProtectedRoute loggedin={loggedIn}>
-      <Messages/>
-      </ProtectedRoute>} />
+        <ProtectedRoute loggedin={loggedIn}>
+        <Messages/>
+        </ProtectedRoute>}
+      />
       <Route path="newpost" element={
-      <ProtectedRoute loggedin={loggedIn}>
-      <Newpost/>
-      </ProtectedRoute>} />
+        <ProtectedRoute loggedin={loggedIn}>
+        <Newpost/>
+        </ProtectedRoute>}
+      />
       <Route path="menu" element={
-      <ProtectedRoute loggedin={loggedIn}>
-      <Menu />
-      </ProtectedRoute>} />
+        <ProtectedRoute loggedin={loggedIn}>
+        <Menu />
+        </ProtectedRoute>}
+      />
+      <Route path="editprofile" element={
+        <ProtectedRoute loggedin={loggedIn}>
+        <EditProfile />
+        </ProtectedRoute>}
+      />
       <Route path='*' element={<NotFound />}/>
       </Route>
     </Routes>

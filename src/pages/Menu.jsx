@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleLoggedIn, updateUser } from '../store/userSlice';
+import { toggleLoggedIn, updateUser, toggleDisplayFooter } from '../store/userSlice';
 import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import menuData from '../json/menuData.json';
@@ -67,7 +67,8 @@ const Menu = () => {
   const { user } = useSelector((state) => state);
   const logout = async () => {
     dispatch(toggleLoggedIn());
-    dispatch(updateUser("", 0, ""))
+    dispatch(updateUser("", 0, ""));
+    dispatch(toggleDisplayFooter());
     navigate('/');
   };
   return (

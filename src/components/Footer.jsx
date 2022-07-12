@@ -5,9 +5,12 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import { TiMessages } from 'react-icons/ti';
 import styled from 'styled-components';
 const FooterWrapper = styled.nav`
+background-color: #FFDEE9;
+background-image: linear-gradient(0deg, #FFDEE9 0%, #B5FFFC 100%);
 height: 7vh;
 justify-content: space-evenly;
 position:relative;
+z-index: 1;
 a {
   display: flex;
   flex-direction: column;

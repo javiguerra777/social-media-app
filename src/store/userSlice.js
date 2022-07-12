@@ -5,6 +5,8 @@ const initialState = {
   name: '',
   email: '',
   uid: 0,
+  displayFooter: false,
+  profilepic: ''
 }
 
 export const userSlice = createSlice({
@@ -12,16 +14,20 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     toggleLoggedIn(state) {
-      state.loggedIn = !state.loggedIn
+      state.loggedIn = !state.loggedIn;
     },
-    updateUser(state, { payload: { email, id, name } }) {
+    updateUser(state, { payload: { email, id, name, profilepic } }) {
       state.email = email;
       state.uid = id;
       state.name = name;
+      state.profilepic = profilepic
+    },
+    toggleDisplayFooter(state) {
+      state.displayFooter = !state.displayFooter;
     }
   }
 });
 
-export const { toggleLoggedIn, updateUser } = userSlice.actions;
+export const { toggleLoggedIn, updateUser, toggleDisplayFooter } = userSlice.actions;
 
 export default userSlice.reducer;

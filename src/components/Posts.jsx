@@ -99,12 +99,12 @@ const Posts = ({ data, setPosts }) => {
   }
   return (
     <PostsWrapper className='container-fluid'>
-      {data.map((post) => {
+      {data.sort((a,b)=> a.date < b.date ? 1 : -1).map((post) => {
         return (
           <section className='card' key={nanoid()}>
             <header>
               <section className='container-fluid'>
-                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile-pic"/>
+                <img src={`${post.profilepic}`} alt="profile-pic"/>
                 <h5>
                   {post.username} <br />
                   <span className='date'>{convertUnix(post.date)}</span>

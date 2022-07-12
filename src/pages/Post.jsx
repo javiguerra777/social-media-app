@@ -25,7 +25,7 @@ overflow-y:scroll;
   }
   .body-container {
   position: relative;
-  top: 3.5em;
+  top: 4em;
   }
 .comment {
   display:flex;
@@ -49,7 +49,7 @@ overflow-y:scroll;
 .comment-foot {
   display: flex;
   flex-direction: row;
-  margin-left: 2.9em;
+  margin-left: 3.5em;
   button {
     border:none;
     background:none;
@@ -66,6 +66,9 @@ overflow-y:scroll;
   position: fixed;
   bottom: 7vh;
 }
+.comment-section {
+  padding-bottom: 2em;
+}
 .date {
   color: gray;
   font-size: .7em;
@@ -74,8 +77,10 @@ overflow-y:scroll;
   display: flex;
   flex-direction: row;
   width: 20vw;
-  justify-content: space-evenly;
-  font-size: .8em;
+  font-size: 14px;
+  div {
+    margin-left: .5em;
+  }
 }
 .thecomment {
   background-color: #F0F0F0;
@@ -134,7 +139,7 @@ const Post = () => {
 
   const addComment = (e) => {
     e.preventDefault();
-    setComments([...comments, { id: nanoid(), username: user.name, comment, date: Date.now() }]);
+    setComments([...comments, { id: nanoid(), username: user.name, comment, date: Date.now(), profilepic: user.profilepic }]);
     setComment("");
   }
   const mentionUser = (user) => {
@@ -146,7 +151,7 @@ const Post = () => {
       <header className='top-page'>
         <section className='left-content'>
           <button onClick={() => navigate('/media')} type="button"><IoIosArrowBack /></button>
-          <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="user-pic"/>
+          <img src={post.profilepic} alt="user-pic"/>
           <h5>{post.username} <br />
             <span className='date'>{convertUnix(post.date)}</span>
           </h5>
@@ -164,12 +169,12 @@ const Post = () => {
           <button><TiArrowForwardOutline/> Share</button>
         </footer>
       </section>
-    <section>
+    <section className='comment-section'>
       {comments?.map(comment => {
         return (
           <section className='comments' key={comment.id}>
             <section className='com-container'>
-              <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile-pic"/>
+              <img src={comment.profilepic} alt="profile-pic"/>
               <section className='thecomment'>
               <h5>{comment.username}</h5>
                 <p>{comment.comment}</p>
@@ -188,7 +193,7 @@ const Post = () => {
         </section>
     </section>
     <form className='comment-form' onSubmit={addComment}>
-    <label>
+    <label htmlFor='comment'>
     <Button style={{backgroundColor:'blue', color:'white'}} type='submit' disabled={comment === ""}> Add comment</Button>{' '}
       <input
       placeholder='Write a comment...'

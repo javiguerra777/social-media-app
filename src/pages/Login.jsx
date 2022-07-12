@@ -7,7 +7,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { db } from '../firebase/firebase-config';
 import { getDocs, collection, where, query } from 'firebase/firestore';
-import { toggleLoggedIn, updateUser } from '../store/userSlice';
+import { toggleLoggedIn, updateUser, toggleDisplayFooter } from '../store/userSlice';
 import styled from 'styled-components';
 
 const LoginWrapper = styled.main`
@@ -78,10 +78,11 @@ const Login = () => {
         querySnapshot.forEach((doc) => {
           return (doc.id, "=>", userData.push(doc.data()))
         });
-          dispatch(updateUser(userData[0],userData[1],userData[2]))
+          dispatch(updateUser(userData[0],userData[1],userData[2], userData[3]))
         }
         getData();
         dispatch(toggleLoggedIn());
+        dispatch(toggleDisplayFooter());
         navigate('/media');
       }
     }catch(err){
