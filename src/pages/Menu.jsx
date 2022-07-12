@@ -21,9 +21,12 @@ width: 100vw;
   border-radius: .5em;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   cursor:pointer;
+  transition: background-color 2s ease-out 100ms;
 }
 .item:hover {
   box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px, rgba(240, 46, 170, 0.05) 25px 25px;
+  background-color: #FF1493;
+  color: white;
 }
 }
 .menu-content {
@@ -41,6 +44,9 @@ button {
   color: black;
   border: none;
   width: 80%
+}
+button: hover{
+  background-color: #1E90FF;
 }
 header {
   align-self: flex-start;

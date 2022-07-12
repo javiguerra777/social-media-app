@@ -62,6 +62,10 @@ background-color: #ebeef0;
       background: none;
       border: none;
     }
+    button:hover {
+      background-color: #1E90FF;
+      color: white;
+    }
   }
 }
 .card:hover {
@@ -83,7 +87,8 @@ background: #FFFFFF;
 `;
 
 const Posts = ({ data, setPosts }) => {
-  const user = useSelector((state)=> state.user)
+  const { user } = useSelector((state) => state);
+  const { comments } = useSelector((state) => state.data);
   const navigate = useNavigate();
   const viewPost = (id) => {
     navigate(`../posts/${id}`)
@@ -99,10 +104,23 @@ const Posts = ({ data, setPosts }) => {
       console.log(err)
     }
   };
+
+  const toggleLiked = () => {
+    console.log('you liked the post');
+  }
+  const sharePost = (post) => {
+    console.log('You shared', post)
+  }
   
   return (
     <PostsWrapper className='container-fluid'>
-      {data.sort((a,b)=> a.date < b.date ? 1 : -1).map((post) => {
+      {data.sort((a, b) => a.date < b.date ? 1 : -1).map((post) => {
+        let count = 0;
+        for (const i in comments) {
+          if (post.id === comments[i].postid) {
+            count++;
+          }
+        }
         return (
           <section className='card' key={nanoid()}>
             <header>
@@ -131,11 +149,12 @@ const Posts = ({ data, setPosts }) => {
             <section className=' container-fluid main-content' onClick={() => viewPost(post.id)}>
               <h5>{post.title} </h5>
               <p>{post.body}</p>
+              {count > 0 && (count === 1 ? `${count} comment` : `${count} comments`) }
             </section>            
             <footer>
-              <button><BsHandThumbsUp /> Like</button>
-              <button onClick={()=> viewPost(post.id)}><BiMessageAlt /> Comment</button>
-              <button><TiArrowForwardOutline/> Share</button>
+              <button type='button' onClick={toggleLiked}><BsHandThumbsUp /> Like</button>
+              <button type='button' onClick={()=> viewPost(post.id)}><BiMessageAlt /> Comment</button>
+              <button type='button' onClick={()=> sharePost(post)}><TiArrowForwardOutline/> Share</button>
             </footer>
           </section>
         )

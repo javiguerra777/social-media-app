@@ -5,7 +5,6 @@ import { db } from '../firebase/firebase-config';
 import { collection, doc, getDocs, addDoc, query, where } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux/es/exports';
-import { nanoid } from 'nanoid';
 import { BsHandThumbsUp } from 'react-icons/bs';
 import { BiMessageAlt } from 'react-icons/bi';
 import { TiArrowForwardOutline } from 'react-icons/ti';

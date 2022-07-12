@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  users: []
+  users: [],
+  comments: [],
 }
 
 const dataSlice = createSlice({
@@ -10,10 +11,13 @@ const dataSlice = createSlice({
   reducers: {
     setAllUsers(state, { payload }) {
       state.users = payload;
+    },
+    setAllComments(state, { payload }) {
+      state.comments = payload;
     }
   }
 });
 
-export const { setAllUsers } = dataSlice.actions;
+export const { setAllUsers, setAllComments } = dataSlice.actions;
 
 export default dataSlice.reducer;

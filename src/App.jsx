@@ -14,7 +14,7 @@ import NotFound from './pages/NotFound';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import Newpost from './pages/Newpost';
 import { useSelector, useDispatch } from 'react-redux/es/exports';
-import { setAllUsers } from './store/dataSlice';
+import { setAllUsers, setAllComments } from './store/dataSlice';
 import { useEffect } from 'react';
 import { db } from './firebase/firebase-config';
 import { collection, getDocs } from 'firebase/firestore';
@@ -35,6 +35,14 @@ function App() {
     }
     getUsers();
   }, []);
+  useEffect(() => {
+    const commentCollectionRef = collection(db, 'comments');
+    const getComments = async () => {
+      const data = await getDocs(commentCollectionRef);
+      dispatch(setAllComments(data.docs.map((doc)=> ({...doc.data(), id:doc.id}))))
+    }
+    getComments();
+  }, [])
   return (
     <Routes>
       <Route path='/' element={<Layout/>}>

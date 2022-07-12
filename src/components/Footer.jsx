@@ -22,8 +22,8 @@ a {
   top:-1em;
 }
 .active {
-  color: blue;
-  border-top: blue 1px solid;
+  color: #1E90FF;
+  border-top: #1E90FF 1px solid;
 }
 `;
 

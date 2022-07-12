@@ -37,6 +37,9 @@ width: 100vw;
 .panel-body {
     padding: 25px 20px;
 }
+.share-btn {
+  background-color: #1E90FF;
+}
 textarea {
   cursor:pointer;
   width: 100%;
@@ -56,7 +59,7 @@ const CreatePost = () => {
         <textarea onClick={toNewPost} className="form-control" rows="1" placeholder="What's on your mind?"></textarea>
         <section className="mar-top">
           <section>
-            <button onClick ={toNewPost} className="btn btn-sm btn-primary pull-right" type="submit"><i ></i><BsFillPencilFill/> Share</button>
+            <button onClick ={toNewPost} className="btn btn-sm btn-primary pull-right share-btn" type="submit"><i ></i><BsFillPencilFill/> Share</button>
           </section>	
           <section className='tooltips'>
         			<button className="btn btn-trans btn-icon add-tooltip" href="#" data-original-title="Add Video" data-toggle="tooltip"><AiOutlineVideoCameraAdd/></button>
