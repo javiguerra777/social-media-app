@@ -9,6 +9,7 @@ import Post from './pages/Post';
 import Messages from './pages/Messages';
 import Menu from './pages/Menu';
 import EditProfile from './pages/EditProfile';
+import ChatRoom from './pages/ChatRoom';
 import NotFound from './pages/NotFound';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import Newpost from './pages/Newpost';
@@ -77,6 +78,11 @@ function App() {
       <Route path="editprofile" element={
         <ProtectedRoute loggedin={loggedIn}>
         <EditProfile />
+        </ProtectedRoute>}
+        />
+      <Route path="chatroom/:id" element={
+        <ProtectedRoute loggedin={loggedIn}>
+        <ChatRoom />
         </ProtectedRoute>}
       />
       <Route path='*' element={<NotFound />}/>

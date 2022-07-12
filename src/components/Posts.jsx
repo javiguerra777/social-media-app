@@ -12,6 +12,8 @@ import { TiArrowForwardOutline } from 'react-icons/ti';
 import styled from 'styled-components';
 import { convertUnix } from '../utils/functions';
 const PostsWrapper = styled.section`
+padding-top: .5em;
+background-color: #ebeef0;
 .accordion {
   a {
     text-decoration: none;
@@ -88,15 +90,16 @@ const Posts = ({ data, setPosts }) => {
   }
   const deletePost = async (id) => {
     try {
-    const postRef = doc(db, 'posts', id);
-    await deleteDoc(postRef);
+      const postRef = doc(db, 'posts', id);
+      await deleteDoc(postRef);
 
-    const remainingPosts = data.filter((post)=> post.id !== id);
-    setPosts(remainingPosts);
-    }catch(err){
+      const remainingPosts = data.filter((post) => post.id !== id);
+      setPosts(remainingPosts);
+    } catch (err) {
       console.log(err)
-    } 
-  }
+    }
+  };
+  
   return (
     <PostsWrapper className='container-fluid'>
       {data.sort((a,b)=> a.date < b.date ? 1 : -1).map((post) => {

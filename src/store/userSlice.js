@@ -22,12 +22,15 @@ export const userSlice = createSlice({
       state.name = name;
       state.profilepic = profilepic
     },
+    updatePicture(state, { payload }) {
+      state.profilepic = payload;
+    },
     toggleDisplayFooter(state) {
       state.displayFooter = !state.displayFooter;
     }
   }
 });
 
-export const { toggleLoggedIn, updateUser, toggleDisplayFooter } = userSlice.actions;
+export const { toggleLoggedIn, updateUser, toggleDisplayFooter, updatePicture } = userSlice.actions;
 
 export default userSlice.reducer;

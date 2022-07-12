@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { BsThreeDots, BsFillPlusCircleFill, BsPencilFill } from 'react-icons/bs';
 
 const HomeWrapper = styled.main`
-background-color: #ebeef0;
+background-color: white;
 height: 93vh; 
 width: 100vw;
 overflow-x: hidden;
@@ -120,13 +120,14 @@ const Home = () => {
     <HomeWrapper className='webkit'>
       <header className='main-header'>
         <section className='image-container'>
-        <img id="header-image" src="https://toppng.com/uploads/preview/cool-backgrounds-hd-11553722962xmab2pqpcv.jpg" alt="header-pic" />
+          <img id="header-image" src={userHome.coverpic} alt="header-pic" />
         <img id="profile-image" src={`${userHome.profilepic}`} alt="profile-pic"/>
         </section>
       </header>
       <section className='body-content'>
         <section className='profile-details'>
           <h3>{userHome.name}</h3>
+          {userHome.bio && <p>{userHome.bio}</p>}
         </section>
         <section className='buttons'>
           <button type='button' style={{color:"white", backgroundColor:"#0d6efd"}}><BsFillPlusCircleFill/> Add to story</button>

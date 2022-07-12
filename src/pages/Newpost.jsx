@@ -71,7 +71,8 @@ const Newpost = () => {
       userid: user.uid,
       useremail: user.email,
       username: user.name,
-      date: Date.now()
+      date: Date.now(),
+      profilepic: user.profilepic
     }
     addDoc(postCollection,newPost);
     navigate('/media');

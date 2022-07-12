@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleDisplayFooter } from '../store/userSlice';
+import { toggleDisplayFooter, updatePicture } from '../store/userSlice';
 import styled from 'styled-components';
 import { IoIosArrowBack } from 'react-icons/io';
 import { db } from '../firebase/firebase-config';
-import { getDocs, collection, where, query, updateDoc } from 'firebase/firestore';
+import { getDocs, collection, where, query, setDoc, doc } from 'firebase/firestore';
 
 
 const EditWrapper = styled.main`
@@ -33,8 +33,8 @@ textarea {
   width: 100vw;
   .image-container {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     .cover {
       height: 15em;
@@ -44,6 +44,9 @@ textarea {
     height: 10em;
     border-radius: 9em;
     width: 10em;
+    }
+    input {
+      margin-left: .5em;
     }
 }
   div {
@@ -63,64 +66,93 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
-  const userCollectionRef = collection(db, 'users');
   const [data, setData] = useState({})
-  const [profilepic, setProfilePic] = useState('');
-  const [coverpic, setCoverPic] = useState('');
   const [bio, setBio] = useState('');
+  const [profilePic, setProfilePic] = useState('');
+  const [headerPic, setHeaderPic] = useState('')
   useEffect(() => {
+    const userCollectionRef = collection(db, 'users');
     const q = query(userCollectionRef, where("id", "==", user.uid));
     const getUserData = async () => {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
-        setData(doc.data());
+        setData({...doc.data(), docid: doc.id});
       });
-      setCoverPic(data.coverpic);
-      setProfilePic(data.profilepic);
     };
     getUserData();
   }, [user.uid]);
- 
   const returnHome = () => {
     dispatch(toggleDisplayFooter());
     navigate('../home');
   }
-  const editBio = async () => {
-    const userInfo = {
-      ...data,
-      bio
+  const editProfile = async (newdata, option) => {
+    switch (option){
+      case "bio":
+        await setDoc(doc(db, 'users', data.docid), {
+          ...data, bio: newdata
+        });
+        break;
+      case "profile":
+        await setDoc(doc(db, 'users', data.docid), {
+          ...data, profilepic: newdata
+        });
+        dispatch(updatePicture(newdata));
+        break;
+      case "header":
+        await setDoc(doc(db, 'users', data.docid), {
+          ...data, coverpic: newdata
+        });
+        break;
+      default:
+        return "Not valid choice";
     }
-    await updateDoc(userCollectionRef, userInfo);
-    setBio('');
   }
   return (
-    <EditWrapper>
+    <EditWrapper className='webkit'>
       <header>
         <button type='button' onClick={returnHome}><IoIosArrowBack /></button>
       </header>
-      <section className='main-content'>
+      <section className='main-content container-fluid'>
         <section>
           <div>
             <h3>Profile Picture</h3>
-            <button type='button'>Edit</button>
+            <button type='button' onClick={()=>editProfile(profilePic, "profile")}>Edit</button>
           </div>
           <div className='image-container'>
-            <img className='image' src={profilepic} alt="profile-pic" />
+            <img className='image' src={data.profilepic} alt="profile-pic" />
+            <label>
+              Submit a photo hyperlink:
+              <input
+                type="url"
+                placeholder='www.photoreference.com'
+                value={profilePic}
+                onChange={(e)=> setProfilePic(e.target.value)}
+              />
+            </label>
           </div>
         </section>
         <section>
           <div>
             <h3>Cover Photo</h3>
-            <button type='button'>Edit</button>
+            <button type='button' onClick={()=> editProfile(headerPic, "header")}>Edit</button>
           </div>
           <div className='image-container'>
-            <img className='cover' src={coverpic} alt="cover-pic" />
+            <img className='cover' src={data.coverpic} alt="cover-pic" />
+            <label>
+              Submit a photo hyperlink:
+              <input
+                type="url"
+                placeholder='www.photoreference.com'
+                value={headerPic}
+                onChange={(e)=> setHeaderPic(e.target.value)}
+              />
+            </label>
           </div>
         </section>
         <section>
           <div>
             <h3>Bio</h3>
-            <button type='button' onClick={editBio}>Edit</button>
+            <button type='button' onClick={()=>editProfile(bio, "bio")}>Edit</button>
           </div>
           <textarea className='container-fluid'
             placeholder='enter bio'
