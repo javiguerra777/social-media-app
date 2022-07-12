@@ -134,7 +134,9 @@ const Post = () => {
   }, [dbData, id]);
 
   useEffect(() => {
-    setComments(post.comments)
+    if (post.comments) {
+      setComments(post.comments)
+    }
   }, [post])
 
   const addComment = (e) => {
@@ -145,7 +147,7 @@ const Post = () => {
   const mentionUser = (user) => {
     setComment(`@${user}`)
   }
-
+  console.log(comments);
   return (
     <PostWrapper className='webkit'>
       <header className='top-page'>

@@ -74,7 +74,7 @@ const Menu = () => {
   return (
     <MenuWrapper>
       <header onClick={()=> navigate('/home')}>
-        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile-pic" />
+        <img src={user.profilepic} alt="profile-pic" />
         <p>{user.name} <br />
           <span>See your profile</span>
         </p>

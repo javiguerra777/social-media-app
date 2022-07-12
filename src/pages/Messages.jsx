@@ -18,6 +18,9 @@ height: 93vh;
 .nomessages {
   text-align:center;
 }
+.suggestions {
+  cursor: pointer;
+}
 `;
 
 export const Messages = () => {
@@ -26,14 +29,16 @@ export const Messages = () => {
   const suggestions = useSelector((state) => state.search.suggestions)
   const [searchInput, setSearchInput] = useState("")
   const [messages, setMessages] = useState([]);
+  
   const suggestionHandler = (text) => {
     setSearchInput(text);
     dispatch(setSuggestions([]));
   }
-  const searchForUser = () => {
-    setSearchInput("");
-    dispatch(setSuggestions([]))
-  }
+  // const searchForUser = (user) => {
+  //   console.log(user)
+  //   setSearchInput("");
+  //   dispatch(setSuggestions([]))
+  // }
   useEffect(() => {
     dispatch(setSuggestions([]))
   }, [])
@@ -41,11 +46,11 @@ export const Messages = () => {
     <MessageWrapper>
       <header className='first-header'>
         <SearchBar userInput={searchInput} searchFunc={setSearchInput} />
-        <button type='button' onClick={searchForUser}><AiOutlineSend/></button>
+        {/* <button type='button' onClick={()=>searchForUser(searchInput)}><AiOutlineSend/></button> */}
       </header>
       {suggestions && suggestions.map((sug, i) => {
         return (
-          <section onClick={()=> suggestionHandler(`${sug.name}`)} key={i}>
+          <section className='suggestions' onClick={()=> suggestionHandler(`${sug}`)} key={i}>
             {sug.name}
           </section>
         )
