@@ -181,7 +181,7 @@ const Posts = ({ data, setPosts }) => {
             </section>
              {post.shared && (
               <section className='shared-post container-fluid'>
-                <section className='shared-header'>
+                <section className='shared-header' onClick={()=>viewPost(post.shared.id)}>
                   <img src={`${post.shared.profilepic}`} alt="profile-pic"/>
                 <h5>
                   {post.shared.username} <br />

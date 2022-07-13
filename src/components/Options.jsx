@@ -2,6 +2,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import {AiFillLock} from 'react-icons/ai'
+import { BsPinAngle, BsPencil, BsTrash, BsBellSlash } from 'react-icons/bs';
+import { GiKnightBanner } from 'react-icons/gi';
 
 const OptionsWrapper = styled.section`
 background: rgba(0, 0, 0, 0.5);
@@ -44,8 +47,9 @@ z-index: 2;
     border-radius: 1em;
   }
   button {
-    background:none;
     border: none;
+    display: flex;
+    flex-direction: row;
   }
 }
 `;
@@ -69,12 +73,12 @@ const Options = ({ post, deletePost, setDisplayOptions }) => {
       {user.uid === post.userid ? (
         <section className='option-section container-fluid'>
           <section className='options'>
-            <button>Pin Post</button>
-            <button>Save Post</button>
-            <button onClick={()=>editPost(post.id)}>Edit Post</button>
-            <button>Edit Privacy</button>
-            <button onClick={() => deletePost(post.id)} className='delete'>Delete Post</button>
-            <button>Turn off updates for this post</button>
+            <button type='button'><BsPinAngle/> Pin Post</button>
+            <button type='button'><GiKnightBanner/> Save Post</button>
+            <button type='button' onClick={()=>editPost(post.id)}><BsPencil/> Edit Post</button>
+            <button type='button'><AiFillLock/> Edit Privacy</button>
+            <button type='button' onClick={() => deletePost(post.id)} className='delete'><BsTrash/> Delete Post</button>
+            <button type='button'><BsBellSlash/> Turn off updates for this post</button>
           </section>
         </section>
       ) : (
