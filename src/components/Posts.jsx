@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Options from './Options';
+import { Share } from './Share';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase/firebase-config';
 import { deleteDoc, doc} from 'firebase/firestore';
-import { Accordion } from 'react-bootstrap';
 import { nanoid } from 'nanoid';
-import { BsHandThumbsUp } from 'react-icons/bs';
+import { BsHandThumbsUp, BsThreeDots } from 'react-icons/bs';
 import { BiMessageAlt } from 'react-icons/bi';
 import { TiArrowForwardOutline } from 'react-icons/ti';
 import styled from 'styled-components';
@@ -76,6 +76,10 @@ background-color: #ebeef0;
   color: gray;
   font-size: .7em;
 }
+.dots {
+  background: none;
+  border: none;
+}
 .main-content {
   cursor:pointer;
 }
@@ -84,12 +88,41 @@ background-color: #ebeef0;
   box-shadow: 0px 20px 0px -10px #FFFFFF, 0px -20px 0px -10px #FFFFFF, 20px 0px 0px -10px #FFFFFF, -20px 0px 0px -10px #FFFFFF, 0px 0px 0px 10px #FF0000, 5px 5px 37px 5px rgba(0,0,0,0);
 background: #FFFFFF;
 }
+.post-info {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .beginning-content {
+    margin-left: .5em;
+  }
+  .end-content {
+    display: flex;
+    flex-direction: row;
+    div {
+      margin-right: .5em;
+    }
+  }
+}
+.shared-post {
+  border: solid 1px #e5e4e2;
+  cursor:pointer;
+  width: 95%;
+  align-self:center;
+  .shared-header {
+    display: flex;
+    flex-direction: row;
+  }
+}
 `;
 
 const Posts = ({ data, setPosts }) => {
-  const { user } = useSelector((state) => state);
   const { comments } = useSelector((state) => state.data);
   const navigate = useNavigate();
+  const [displayShared, setDisplayShared] = useState(false);
+  const [displayOptions, setDisplayOptions] = useState(false);
+  const [showId, setShowId] = useState(null);
+  const [shareId, setShareId] = useState(null);
   const viewPost = (id) => {
     navigate(`../posts/${id}`)
   }
@@ -97,9 +130,9 @@ const Posts = ({ data, setPosts }) => {
     try {
       const postRef = doc(db, 'posts', id);
       await deleteDoc(postRef);
-
       const remainingPosts = data.filter((post) => post.id !== id);
       setPosts(remainingPosts);
+      setDisplayOptions(false);
     } catch (err) {
       console.log(err)
     }
@@ -108,8 +141,13 @@ const Posts = ({ data, setPosts }) => {
   const toggleLiked = () => {
     console.log('you liked the post');
   }
-  const sharePost = (post) => {
-    console.log('You shared', post)
+  const sharePost = (id) => {
+    setDisplayShared(true);
+    setShareId(id);
+  }
+  const showOptions = (id) => {
+    setDisplayOptions(true);
+    setShowId(id);
   }
   
   return (
@@ -123,6 +161,7 @@ const Posts = ({ data, setPosts }) => {
         }
         return (
           <section className='card' key={nanoid()}>
+            {displayShared && post.id === shareId &&(<Share setDisplayShared={setDisplayShared} post={post} />)}
             <header>
               <section className='container-fluid'>
                 <img src={`${post.profilepic}`} alt="profile-pic"/>
@@ -131,30 +170,49 @@ const Posts = ({ data, setPosts }) => {
                   <span className='date'>{convertUnix(post.date)}</span>
                 </h5>
               </section>
-              <Accordion>
-                <Accordion.Item eventKey="1">
-                  <Accordion.Header></Accordion.Header>
-                  <Accordion.Body>
-                    {user.uid === post.userid ? (
-                      <Options post={post} deletePost={deletePost} />)
-                      :(
-                        <section className='non-user'>
-                          <button type="button">Hide Post</button>
-                      </section>
-                    )}
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
+              <button className='dots' type='button' onClick={()=>showOptions(post.id)}><BsThreeDots/></button>
+              {displayOptions && post.id === showId && (
+                <Options post={post} deletePost={deletePost} setDisplayOptions={setDisplayOptions} />
+              )}
             </header>
             <section className=' container-fluid main-content' onClick={() => viewPost(post.id)}>
               <h5>{post.title} </h5>
               <p>{post.body}</p>
-              {count > 0 && (count === 1 ? `${count} comment` : `${count} comments`) }
-            </section>            
+            </section>
+             {post.shared && (
+              <section className='shared-post container-fluid'>
+                <section className='shared-header'>
+                  <img src={`${post.shared.profilepic}`} alt="profile-pic"/>
+                <h5>
+                  {post.shared.username} <br />
+                  <span className='date'>{convertUnix(post.shared.date)}</span>
+                </h5>
+                </section>
+                <section className='shared-body'>
+                <h5>{post.shared.title} </h5>
+              <p>{post.shared.body}</p>
+                </section>
+              </section>
+            )}
+            <section className='post-info'>
+              <section className='beginning-content'>
+                {post.likes && 'Likes'}
+              </section>
+              <section className='end-content'>
+                <div>
+                {count > 0 && (count === 1 ? `${count} comment` : `${count} comments`)}
+              </div>
+              <div>
+                  {post.sharedBy && (
+                    post.sharedBy.length === 1 ? `${post.sharedBy.length} share` : `${post.sharedBy.length} shares`
+                )}
+              </div>
+              </section>
+            </section>
             <footer>
               <button type='button' onClick={toggleLiked}><BsHandThumbsUp /> Like</button>
               <button type='button' onClick={()=> viewPost(post.id)}><BiMessageAlt /> Comment</button>
-              <button type='button' onClick={()=> sharePost(post)}><TiArrowForwardOutline/> Share</button>
+              <button type='button' onClick={()=> sharePost(post.id)}><TiArrowForwardOutline/> Share</button>
             </footer>
           </section>
         )

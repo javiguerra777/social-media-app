@@ -66,8 +66,8 @@ const Newpost = () => {
   const createNewPost = async (e)=> {
     e.preventDefault();
     const newPost = {
-      title:title,
-      body:body,
+      title,
+      body,
       userid: user.uid,
       useremail: user.email,
       username: user.name,
