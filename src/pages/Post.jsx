@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux/es/exports';
 import { BsHandThumbsUp } from 'react-icons/bs';
 import { BiMessageAlt } from 'react-icons/bi';
 import { TiArrowForwardOutline } from 'react-icons/ti';
-import {IoIosArrowBack} from 'react-icons/io'
+import { IoIosArrowBack } from 'react-icons/io';
 import styled from 'styled-components';
 import { convertUnix } from '../utils/functions';
 
@@ -151,6 +151,7 @@ const Post = () => {
     e.preventDefault();
     const newComment = {
       username: user.name,
+      userid: user.uid,
       comment,
       date: Date.now(),
       profilepic: user.profilepic,

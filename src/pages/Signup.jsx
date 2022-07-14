@@ -89,7 +89,7 @@ const Signup = () => {
       await createUserWithEmailAndPassword(auth, registerEmail, registerPassword)
         .then(cred => {
           return addDoc(userCollection, {
-            id: cred.user.uid,
+            userid: cred.user.uid,
             email: registerEmail,
             name: name
           })
