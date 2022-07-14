@@ -235,7 +235,10 @@ function Posts({ data, setPosts }) {
                       </span>
                     </h5>
                   </section>
-                  <section className="shared-body">
+                  <section
+                    className="shared-body"
+                    onClick={() => viewPost(post.shared.id)}
+                  >
                     <h5>{post.shared.title} </h5>
                     <p>{post.shared.body}</p>
                   </section>
