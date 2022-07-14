@@ -224,11 +224,11 @@ function Post() {
                   </section>
                   <section className="comment-foot">
                     <section className="item">
-                      <p>{convertUnix(comment.date)}</p>
+                      <p>{convertUnix(com.date)}</p>
                       <div type="button">Like</div>
                       <div
                         type="button"
-                        onClick={() => mentionUser(comment.username)}
+                        onClick={() => mentionUser(com.username)}
                       >
                         Reply
                       </div>

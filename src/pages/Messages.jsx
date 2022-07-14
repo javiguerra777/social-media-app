@@ -3,9 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/messages.css';
 import { useSelector, useDispatch } from 'react-redux/es/exports';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { AiOutlineSend } from 'react-icons/ai';
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+} from 'firebase/firestore';
+// import { AiOutlineSend } from 'react-icons/ai';
 import { nanoid } from 'nanoid';
+import { db } from '../firebase/firebase-config';
 import { setSuggestions } from '../store/searchSlice';
 import SearchBar from '../components/SearchBar';
 
@@ -28,22 +37,38 @@ const MessageWrapper = styled.main`
 
 export default function Messages() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state);
   const suggestions = useSelector(
     (state) => state.search.suggestions,
   );
+  const messagesCollectionRef = collection(db, 'messages');
   const [searchInput, setSearchInput] = useState('');
   const [messages, setMessages] = useState([]);
-
-  const suggestionHandler = (text) => {
-    setSearchInput(text);
+  useEffect(() => {
+    const q = query(
+      messagesCollectionRef,
+      where('users', 'array-contains', user.uid),
+    );
+    const getChatRooms = async () => {
+      const chatRooms = [];
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        chatRooms.push({ ...doc.data(), id: doc.id });
+      });
+      setMessages(chatRooms);
+    };
+    getChatRooms();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.uid]);
+  const addChatRoom = async (id) => {
+    const messageRoom = {
+      users: [user.uid, id],
+      date: Date.now(),
+    };
+    await addDoc(messagesCollectionRef, messageRoom);
+    setSearchInput('');
     dispatch(setSuggestions([]));
   };
-  // const searchForUser = (user) => {
-  //   console.log(user)
-  //   setSearchInput("");
-  //   dispatch(setSuggestions([]))
-  // }
   useEffect(() => {
     dispatch(setSuggestions([]));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,7 +87,7 @@ export default function Messages() {
           return (
             <section
               className="suggestions"
-              onClick={() => suggestionHandler(`${sug}`)}
+              onClick={() => addChatRoom(`${sug.userid}`)}
               key={nanoid()}
             >
               {sug.name}
@@ -80,15 +105,11 @@ export default function Messages() {
               return (
                 <section
                   className="card onemessage card-message"
-                  key={message.id}
+                  key={nanoid()}
                 >
-                  <h5>
-                    User:{' '}
-                    {message.thread.toemail === user.email
-                      ? message.thread.fromemail
-                      : message.thread.toemail}
-                  </h5>
-                  <p>{message.thread.message}</p>
+                  <Link to={`../chatroom/${message.id}`}>
+                    Go to chatroom
+                  </Link>
                 </section>
               );
             })}

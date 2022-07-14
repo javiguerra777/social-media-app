@@ -81,7 +81,7 @@ function Edit() {
     };
     getDbData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     const pData = dbData.find((data) => data.id === id);
