@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  suggestions: []
-}
+  suggestions: [],
+};
 
 const searchSlice = createSlice({
   name: 'data',
@@ -10,8 +11,8 @@ const searchSlice = createSlice({
   reducers: {
     setSuggestions(state, { payload }) {
       state.suggestions = payload;
-    }
-  }
+    },
+  },
 });
 
 export const { setSuggestions } = searchSlice.actions;

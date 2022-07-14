@@ -114,7 +114,10 @@ function Home() {
 
   useEffect(() => {
     const userCollectionRef = collection(db, 'users');
-    const q = query(userCollectionRef, where('id', '==', user.uid));
+    const q = query(
+      userCollectionRef,
+      where('userid', '==', user.uid),
+    );
     const getUserData = async () => {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
@@ -138,7 +141,7 @@ function Home() {
           />
           <img
             id="profile-image"
-            src={`${userHome.profilepic}`}
+            src={userHome.profilepic}
             alt="profile-pic"
           />
         </section>

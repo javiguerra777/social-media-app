@@ -1,9 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   users: [],
   comments: [],
-}
+};
 
 const dataSlice = createSlice({
   name: 'data',
@@ -14,8 +15,8 @@ const dataSlice = createSlice({
     },
     setAllComments(state, { payload }) {
       state.comments = payload;
-    }
-  }
+    },
+  },
 });
 
 export const { setAllUsers, setAllComments } = dataSlice.actions;

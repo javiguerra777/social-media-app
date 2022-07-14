@@ -96,20 +96,13 @@ function Login() {
           where('email', '==', email),
         );
         const getData = async () => {
-          const userData = [];
+          let userData = {};
           const querySnapshot = await getDocs(q);
           querySnapshot.forEach((doc) => {
-            // eslint-disable-next-line no-sequences
-            return doc.id, '=>', userData.push(doc.data());
+            userData = { ...doc.data() };
+            // return doc.id, '=>', userData.push(doc.data());
           });
-          dispatch(
-            updateUser(
-              userData[0],
-              userData[1],
-              userData[2],
-              userData[3],
-            ),
-          );
+          dispatch(updateUser(userData));
         };
         getData();
         dispatch(toggleLoggedIn());
@@ -117,9 +110,9 @@ function Login() {
         navigate('/media');
       }
     } catch (err) {
-      console.log(err.message);
       setFailedlogin(true);
       setPassword('');
+      throw Error(err.message);
     }
   };
   if (failedLogin) {

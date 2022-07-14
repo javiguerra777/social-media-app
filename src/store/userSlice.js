@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   loggedIn: false,
@@ -6,8 +7,8 @@ const initialState = {
   email: '',
   uid: 0,
   displayFooter: false,
-  profilepic: ''
-}
+  profilepic: '',
+};
 
 export const userSlice = createSlice({
   name: 'user',
@@ -16,21 +17,29 @@ export const userSlice = createSlice({
     toggleLoggedIn(state) {
       state.loggedIn = !state.loggedIn;
     },
-    updateUser(state, { payload: { email, id, name, profilepic } }) {
+    updateUser(
+      state,
+      { payload: { email, userid, name, profilepic } },
+    ) {
       state.email = email;
-      state.uid = id;
+      state.uid = userid;
       state.name = name;
-      state.profilepic = profilepic
+      state.profilepic = profilepic;
     },
     updatePicture(state, { payload }) {
       state.profilepic = payload;
     },
     toggleDisplayFooter(state) {
       state.displayFooter = !state.displayFooter;
-    }
-  }
+    },
+  },
 });
 
-export const { toggleLoggedIn, updateUser, toggleDisplayFooter, updatePicture } = userSlice.actions;
+export const {
+  toggleLoggedIn,
+  updateUser,
+  toggleDisplayFooter,
+  updatePicture,
+} = userSlice.actions;
 
 export default userSlice.reducer;

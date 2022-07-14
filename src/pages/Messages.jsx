@@ -26,7 +26,7 @@ const MessageWrapper = styled.main`
   }
 `;
 
-export function Messages() {
+export default function Messages() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const suggestions = useSelector(
@@ -98,4 +98,3 @@ export function Messages() {
     </MessageWrapper>
   );
 }
-export default Messages;
