@@ -1,11 +1,17 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleLoggedIn, updateUser, toggleDisplayFooter } from '../store/userSlice';
 import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
-import menuData from '../json/menuData.json';
 import { nanoid } from 'nanoid';
+import menuData from '../json/menuData.json';
+import {
+  toggleLoggedIn,
+  updateUser,
+  toggleDisplayFooter,
+} from '../store/userSlice';
 
 const MenuWrapper = styled.main`
 background-color: #f5f5f5;
@@ -67,39 +73,40 @@ img {
     border-radius: 3em;
   }
 `;
-const Menu = () => {
+function Menu() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state);
   const logout = async () => {
     dispatch(toggleLoggedIn());
-    dispatch(updateUser("", 0, ""));
+    dispatch(updateUser('', 0, ''));
     dispatch(toggleDisplayFooter());
     navigate('/');
   };
   return (
     <MenuWrapper>
-      <header onClick={()=> navigate('/home')}>
+      <header onClick={() => navigate('/home')}>
         <img src={user.profilepic} alt="profile-pic" />
-        <p>{user.name} <br />
+        <p>
+          {user.name} <br />
           <span>See your profile</span>
         </p>
       </header>
-      <section className='shortcuts'>
+      <section className="shortcuts">
         <p>All shortcuts</p>
       </section>
-      <section className='menu-content'>
+      <section className="menu-content">
         {menuData.map((item) => {
           return (
-            <section key={nanoid()} className='item'>
+            <section key={nanoid()} className="item">
               <p>{item.text}</p>
             </section>
-          )
+          );
         })}
       </section>
       <Button onClick={logout}>Log Out</Button>
     </MenuWrapper>
-  )
+  );
 }
 
 export default Menu;

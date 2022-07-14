@@ -1,82 +1,91 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleDisplayFooter, updatePicture } from '../store/userSlice';
 import styled from 'styled-components';
 import { IoIosArrowBack } from 'react-icons/io';
+import {
+  getDocs,
+  collection,
+  where,
+  query,
+  setDoc,
+  doc,
+} from 'firebase/firestore';
 import { db } from '../firebase/firebase-config';
-import { getDocs, collection, where, query, setDoc, doc } from 'firebase/firestore';
-
+import {
+  toggleDisplayFooter,
+  updatePicture,
+} from '../store/userSlice';
 
 const EditWrapper = styled.main`
-height: 100vh;
-width: 100vw;
-header {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  button {
-    border: none;
-    background: none;
-    justify-self: flex-start;
-  }
-}
-textarea {
-  width: 100%;
-  max-width: 100%;
-  resize:none;
-}
-.main-content{
-  display: flex;
-  flex-direction: column;
-
+  height: 100vh;
   width: 100vw;
-  .image-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    .cover {
-      height: 15em;
-      width: 95%;
-    }
-    .image {
-    height: 10em;
-    border-radius: 9em;
-    width: 10em;
-    }
-    input {
-      margin-left: .5em;
-    }
-}
-  div {
+  header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    width: 100%;
     button {
       border: none;
       background: none;
-      color: blue;
+      justify-self: flex-start;
     }
   }
-}
+  textarea {
+    width: 100%;
+    max-width: 100%;
+    resize: none;
+  }
+  .main-content {
+    display: flex;
+    flex-direction: column;
+
+    width: 100vw;
+    .image-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      .cover {
+        height: 15em;
+        width: 95%;
+      }
+      .image {
+        height: 10em;
+        border-radius: 9em;
+        width: 10em;
+      }
+      input {
+        margin-left: 0.5em;
+      }
+    }
+    div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      button {
+        border: none;
+        background: none;
+        color: blue;
+      }
+    }
+  }
 `;
 
-const EditProfile = () => {
+function EditProfile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
-  const [data, setData] = useState({})
+  const [data, setData] = useState({});
   const [bio, setBio] = useState('');
   const [profilePic, setProfilePic] = useState('');
-  const [headerPic, setHeaderPic] = useState('')
+  const [headerPic, setHeaderPic] = useState('');
   useEffect(() => {
     const userCollectionRef = collection(db, 'users');
-    const q = query(userCollectionRef, where("id", "==", user.uid));
+    const q = query(userCollectionRef, where('id', '==', user.uid));
     const getUserData = async () => {
       const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        setData({...doc.data(), docid: doc.id});
+      querySnapshot.forEach((document) => {
+        setData({ ...document.data(), docid: document.id });
       });
     };
     getUserData();
@@ -84,49 +93,64 @@ const EditProfile = () => {
   const returnHome = () => {
     dispatch(toggleDisplayFooter());
     navigate('../home');
-  }
+  };
+  // eslint-disable-next-line consistent-return
   const editProfile = async (newdata, option) => {
-    switch (option){
-      case "bio":
+    switch (option) {
+      case 'bio':
         await setDoc(doc(db, 'users', data.docid), {
-          ...data, bio: newdata
+          ...data,
+          bio: newdata,
         });
         break;
-      case "profile":
+      case 'profile':
         await setDoc(doc(db, 'users', data.docid), {
-          ...data, profilepic: newdata
+          ...data,
+          profilepic: newdata,
         });
         dispatch(updatePicture(newdata));
         break;
-      case "header":
+      case 'header':
         await setDoc(doc(db, 'users', data.docid), {
-          ...data, coverpic: newdata
+          ...data,
+          coverpic: newdata,
         });
         break;
       default:
-        return "Not valid choice";
+        return 'Not valid choice';
     }
-  }
+  };
   return (
-    <EditWrapper className='webkit'>
+    <EditWrapper className="webkit">
       <header>
-        <button type='button' onClick={returnHome}><IoIosArrowBack /></button>
+        <button type="button" onClick={returnHome}>
+          <IoIosArrowBack />
+        </button>
       </header>
-      <section className='main-content container-fluid'>
+      <section className="main-content container-fluid">
         <section>
           <div>
             <h3>Profile Picture</h3>
-            <button type='button' onClick={()=>editProfile(profilePic, "profile")}>Edit</button>
+            <button
+              type="button"
+              onClick={() => editProfile(profilePic, 'profile')}
+            >
+              Edit
+            </button>
           </div>
-          <div className='image-container'>
-            <img className='image' src={data.profilepic} alt="profile-pic" />
-            <label>
+          <div className="image-container">
+            <img
+              className="image"
+              src={data.profilepic}
+              alt="profile-pic"
+            />
+            <label htmlFor="url">
               Submit a photo hyperlink:
               <input
                 type="url"
-                placeholder='www.photoreference.com'
+                placeholder="www.photoreference.com"
                 value={profilePic}
-                onChange={(e)=> setProfilePic(e.target.value)}
+                onChange={(e) => setProfilePic(e.target.value)}
               />
             </label>
           </div>
@@ -134,17 +158,26 @@ const EditProfile = () => {
         <section>
           <div>
             <h3>Cover Photo</h3>
-            <button type='button' onClick={()=> editProfile(headerPic, "header")}>Edit</button>
+            <button
+              type="button"
+              onClick={() => editProfile(headerPic, 'header')}
+            >
+              Edit
+            </button>
           </div>
-          <div className='image-container'>
-            <img className='cover' src={data.coverpic} alt="cover-pic" />
-            <label>
+          <div className="image-container">
+            <img
+              className="cover"
+              src={data.coverpic}
+              alt="cover-pic"
+            />
+            <label htmlFor="url">
               Submit a photo hyperlink:
               <input
                 type="url"
-                placeholder='www.photoreference.com'
+                placeholder="www.photoreference.com"
                 value={headerPic}
-                onChange={(e)=> setHeaderPic(e.target.value)}
+                onChange={(e) => setHeaderPic(e.target.value)}
               />
             </label>
           </div>
@@ -152,18 +185,23 @@ const EditProfile = () => {
         <section>
           <div>
             <h3>Bio</h3>
-            <button type='button' onClick={()=>editProfile(bio, "bio")}>Edit</button>
+            <button
+              type="button"
+              onClick={() => editProfile(bio, 'bio')}
+            >
+              Edit
+            </button>
           </div>
-          <textarea className='container-fluid'
-            placeholder='enter bio'
+          <textarea
+            className="container-fluid"
+            placeholder="enter bio"
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-          >
-          </textarea>
+          />
         </section>
       </section>
     </EditWrapper>
-  )
-};
+  );
+}
 
 export default EditProfile;
