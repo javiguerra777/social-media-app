@@ -13,9 +13,8 @@ import { useSelector } from 'react-redux/es/exports';
 import {
   doc,
   updateDoc,
-  collection,
-  getDocs,
   arrayUnion,
+  onSnapshot,
 } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
 import { db } from '../firebase/firebase-config';
@@ -23,6 +22,8 @@ import { db } from '../firebase/firebase-config';
 const ChatRoomWrapper = styled.main`
   background-color: #333333;
   height: 93vh;
+  overflow-y: scroll;
+  padding-bottom: 3em;
   header {
     color: white;
     background-color: #3b3c36;
@@ -36,9 +37,11 @@ const ChatRoomWrapper = styled.main`
     }
   }
   footer {
+    background-color: #333333;
     position: fixed;
     bottom: 7vh;
     width: 100vw;
+    z-index: 2;
     button {
       border: none;
       background: none;
@@ -77,15 +80,16 @@ const ChatRoomWrapper = styled.main`
     align-self: flex-end;
     background-color: #1e90ff;
     margin-right: 0.5em;
+    min-width: 10%;
+    max-width: 45%;
   }
   .nonuser {
     background-color: #3b3c36;
     margin-left: 0.5em;
+    max-width: 30%;
   }
   .onemessage {
     margin-top: 1em;
-    min-width: 50%;
-    max-width: 75%;
     border-radius: 1em;
     word-wrap: break-word;
   }
@@ -96,33 +100,23 @@ function ChatRoom() {
   const { user } = useSelector((state) => state);
   const { id } = useParams();
   const room = doc(db, 'messages', id);
-  const [dbData, setDbData] = useState([room]);
-  const messagesCollectionRef = collection(db, 'messages');
+  const [roomDbData, setRoomDbData] = useState({});
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [messagesRef, setMessagesRef] = useState({});
-
+  const { messages } = roomDbData;
   useEffect(() => {
-    const getDbData = async () => {
-      const data = await getDocs(messagesCollectionRef);
-      setDbData(
-        data.docs.map((document) => ({
-          ...document.data(),
-          id: document.id,
-        })),
+    const consistentConnection = async () => {
+      const unsub = await onSnapshot(
+        doc(db, 'messages', id),
+        (document) => {
+          setRoomDbData(document.data());
+        },
       );
     };
-    getDbData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    consistentConnection();
 
-  useEffect(() => {
-    const pData = dbData.find((data) => data.id === id);
-    setMessagesRef(pData);
-    if (messagesRef.messages) {
-      setMessages(messagesRef.messages);
-    }
-  }, [dbData, id, messagesRef.messages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
   const returnHome = () => {
     navigate('../messages');
   };
@@ -140,7 +134,6 @@ function ChatRoom() {
       messages: arrayUnion(sentMessage),
     });
     setMessage('');
-    setMessages([...messages, sentMessage]);
   };
   return (
     <ChatRoomWrapper>
@@ -154,7 +147,7 @@ function ChatRoom() {
         </button>
       </header>
       <section className="messages-container">
-        {Object.keys(messages).length !== 0 &&
+        {typeof messages !== 'undefined' &&
           messages.map((mes) => {
             return (
               <section
