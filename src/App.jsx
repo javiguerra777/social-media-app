@@ -5,7 +5,7 @@ import './App.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux/es/exports';
 import { useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import Layout from './pages/Layout';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -30,30 +30,44 @@ function ProtectedRoute({ loggedin, children }) {
 }
 function App() {
   const dispatch = useDispatch();
-  const loggedIn = useSelector((state) => state.user.loggedIn);
+  const { loggedIn } = useSelector((state) => state.user);
   useEffect(() => {
     const userCollectionRef = collection(db, 'users');
-    const getUsers = async () => {
-      const data = await getDocs(userCollectionRef);
-      dispatch(
-        setAllUsers(
-          data.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
-        ),
+    const updateUsers = async () => {
+      const unsub = await onSnapshot(
+        userCollectionRef,
+        (document) => {
+          dispatch(
+            setAllUsers(
+              document.docs.map((theDoc) => ({
+                ...theDoc.data(),
+                id: theDoc.id,
+              })),
+            ),
+          );
+        },
       );
     };
-    getUsers();
+    updateUsers();
   }, []);
   useEffect(() => {
     const commentCollectionRef = collection(db, 'comments');
-    const getComments = async () => {
-      const data = await getDocs(commentCollectionRef);
-      dispatch(
-        setAllComments(
-          data.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
-        ),
+    const updateComments = async () => {
+      const unsub = await onSnapshot(
+        commentCollectionRef,
+        (document) => {
+          dispatch(
+            setAllComments(
+              document.docs.map((theDoc) => ({
+                ...theDoc.data(),
+                id: theDoc.id,
+              })),
+            ),
+          );
+        },
       );
     };
-    getComments();
+    updateComments();
   }, []);
   return (
     <Routes>

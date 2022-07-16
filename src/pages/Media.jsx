@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import styled from 'styled-components';
 import CreatePost from '../components/CreatePost';
 import Posts from '../components/Posts';
@@ -23,9 +23,16 @@ function Media() {
   const postsCollectionsRef = collection(db, 'posts');
   useEffect(() => {
     const getPosts = async () => {
-      const data = await getDocs(postsCollectionsRef);
-      setPosts(
-        data.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
+      const unsub = await onSnapshot(
+        postsCollectionsRef,
+        (document) => {
+          setPosts(
+            document.docs.map((theDoc) => ({
+              ...theDoc.data(),
+              id: theDoc.id,
+            })),
+          );
+        },
       );
     };
     getPosts();

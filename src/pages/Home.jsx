@@ -6,6 +6,7 @@ import {
   collection,
   where,
   query,
+  onSnapshot,
 } from 'firebase/firestore';
 import styled from 'styled-components';
 import {
@@ -102,12 +103,16 @@ function Home() {
       where('userid', '==', user.uid),
     );
     const getData = async () => {
-      const userPosts = [];
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        userPosts.push({ ...doc.data(), id: doc.id });
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const allPosts = [];
+        querySnapshot.forEach((document) => {
+          allPosts.push({
+            ...document.data(),
+            id: document.id,
+          });
+        });
+        setPosts(allPosts);
       });
-      setPosts(userPosts);
     };
     getData();
   }, [user.uid]);

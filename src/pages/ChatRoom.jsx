@@ -103,6 +103,7 @@ function ChatRoom() {
   const [roomDbData, setRoomDbData] = useState({});
   const [message, setMessage] = useState('');
   const { messages } = roomDbData;
+
   useEffect(() => {
     const consistentConnection = async () => {
       const unsub = await onSnapshot(
@@ -130,18 +131,21 @@ function ChatRoom() {
     };
     await updateDoc(room, {
       date: Date.now(),
-      lastMessage: message,
+      lastMessage: {
+        message,
+        userid: user.uid,
+      },
       messages: arrayUnion(sentMessage),
     });
     setMessage('');
   };
   return (
-    <ChatRoomWrapper>
+    <ChatRoomWrapper className="webkit">
       <header>
         <button type="button" onClick={returnHome}>
           <IoIosArrowBack />
         </button>
-        <h1>Chatroom name</h1>
+        <h1>{roomDbData.chatName}</h1>
         <button type="button">
           <FiVideo />
         </button>

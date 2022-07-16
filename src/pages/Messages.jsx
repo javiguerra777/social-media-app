@@ -1,25 +1,37 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
-import '../styles/messages.css';
 import { useSelector, useDispatch } from 'react-redux/es/exports';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   collection,
   addDoc,
   query,
   where,
-  getDocs,
+  onSnapshot,
 } from 'firebase/firestore';
-// import { AiOutlineSend } from 'react-icons/ai';
 import { nanoid } from 'nanoid';
 import { db } from '../firebase/firebase-config';
 import { setSuggestions } from '../store/searchSlice';
 import SearchBar from '../components/SearchBar';
+import { convertUnix } from '../utils/functions';
 
 const MessageWrapper = styled.main`
   height: 93vh;
+  overflow-y: scroll;
+  .chatroom {
+    cursor: pointer;
+    border-bottom: 1px solid #e5e4e2;
+  }
+  .chatroom: hover {
+    -webkit-box-shadow: 5px 5px 5px 0px #000000,
+      inset 4px 4px 15px 0px #000000,
+      5px 5px 37px 5px rgba(0, 0, 0, 0);
+    box-shadow: 5px 5px 5px 0px #000000,
+      inset 4px 4px 15px 0px #000000,
+      5px 5px 37px 5px rgba(0, 0, 0, 0);
+  }
   .first-header {
     display: flex;
     button {
@@ -36,11 +48,10 @@ const MessageWrapper = styled.main`
 `;
 
 export default function Messages() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
-  const suggestions = useSelector(
-    (state) => state.search.suggestions,
-  );
+  const { suggestions } = useSelector((state) => state.search);
   const messagesCollectionRef = collection(db, 'messages');
   const [searchInput, setSearchInput] = useState('');
   const [messages, setMessages] = useState([]);
@@ -50,12 +61,16 @@ export default function Messages() {
       where('users', 'array-contains', user.uid),
     );
     const getChatRooms = async () => {
-      const chatRooms = [];
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        chatRooms.push({ ...doc.data(), id: doc.id });
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const chatRooms = [];
+        querySnapshot.forEach((document) => {
+          chatRooms.push({
+            ...document.data(),
+            id: document.id,
+          });
+        });
+        setMessages(chatRooms);
       });
-      setMessages(chatRooms);
     };
     getChatRooms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,7 +80,9 @@ export default function Messages() {
       users: [user.uid, id],
       date: Date.now(),
     };
-    await addDoc(messagesCollectionRef, messageRoom);
+    await addDoc(messagesCollectionRef, messageRoom).then(
+      (response) => navigate(`../chatroom/${response.id}`),
+    );
     setSearchInput('');
     dispatch(setSuggestions([]));
   };
@@ -73,14 +90,14 @@ export default function Messages() {
     dispatch(setSuggestions([]));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // console.log(messages);
   return (
-    <MessageWrapper>
+    <MessageWrapper className="webkit">
       <header className="first-header">
         <SearchBar
           userInput={searchInput}
           searchFunc={setSearchInput}
         />
-        {/* <button type='button' onClick={()=>searchForUser(searchInput)}><AiOutlineSend/></button> */}
       </header>
       {suggestions &&
         suggestions.map((sug) => {
@@ -99,22 +116,36 @@ export default function Messages() {
           <p>No messages, start a conversation!</p>
         </section>
       ) : (
-        <div className="messages-container">
+        <section className="messages-container container-fluid">
           <section>
             {messages.map((message) => {
               return (
                 <section
-                  className="card onemessage card-message"
-                  key={nanoid()}
+                  className="chatroom"
+                  onClick={() =>
+                    navigate(`../chatroom/${message.id}`)
+                  }
                 >
-                  <Link to={`../chatroom/${message.id}`}>
-                    Go to chatroom
-                  </Link>
+                  <h5>
+                    Room:{' '}
+                    {message.chatName
+                      ? message.chatName
+                      : 'chatroom name is undefined'}
+                  </h5>
+                  {message.lastMessage && (
+                    <p>
+                      {message.lastMessage.userid === user.uid
+                        ? 'You: '
+                        : ''}
+                      {message.lastMessage.message}{' '}
+                      {convertUnix(message.date)}
+                    </p>
+                  )}
                 </section>
               );
             })}
           </section>
-        </div>
+        </section>
       )}
     </MessageWrapper>
   );
