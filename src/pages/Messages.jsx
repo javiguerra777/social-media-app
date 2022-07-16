@@ -118,32 +118,34 @@ export default function Messages() {
       ) : (
         <section className="messages-container container-fluid">
           <section>
-            {messages.map((message) => {
-              return (
-                <section
-                  className="chatroom"
-                  onClick={() =>
-                    navigate(`../chatroom/${message.id}`)
-                  }
-                >
-                  <h5>
-                    Room:{' '}
-                    {message.chatName
-                      ? message.chatName
-                      : 'chatroom name is undefined'}
-                  </h5>
-                  {message.lastMessage && (
-                    <p>
-                      {message.lastMessage.userid === user.uid
-                        ? 'You: '
-                        : ''}
-                      {message.lastMessage.message}{' '}
-                      {convertUnix(message.date)}
-                    </p>
-                  )}
-                </section>
-              );
-            })}
+            {messages
+              .sort((a, b) => (a.date < b.date ? 1 : -1))
+              .map((message) => {
+                return (
+                  <section
+                    className="chatroom"
+                    onClick={() =>
+                      navigate(`../chatroom/${message.id}`)
+                    }
+                  >
+                    <h5>
+                      Room:{' '}
+                      {message.chatName
+                        ? message.chatName
+                        : 'chatroom name is undefined'}
+                    </h5>
+                    {message.lastMessage && (
+                      <p>
+                        {message.lastMessage.userid === user.uid
+                          ? 'You: '
+                          : ''}
+                        {message.lastMessage.message}{' '}
+                        {convertUnix(message.date)}
+                      </p>
+                    )}
+                  </section>
+                );
+              })}
           </section>
         </section>
       )}

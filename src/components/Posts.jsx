@@ -125,6 +125,7 @@ const PostsWrapper = styled.section`
     cursor: pointer;
     width: 95%;
     align-self: center;
+    margin-bottom: 0.5em;
     .shared-header {
       display: flex;
       flex-direction: row;
@@ -212,7 +213,7 @@ function Posts({ data, setPosts }) {
                 )}
               </header>
               <section
-                className=" container-fluid main-content"
+                className="container-fluid main-content"
                 onClick={() => viewPost(post.id)}
               >
                 <h5>{post.title} </h5>

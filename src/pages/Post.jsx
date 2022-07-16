@@ -212,31 +212,33 @@ function Post() {
         </section>
         <section className="comment-section">
           {Object.keys(comments).length !== 0 &&
-            comments.map((com) => {
-              return (
-                <section className="comments" key={com.id}>
-                  <section className="com-container">
-                    <img src={com.profilepic} alt="profile-pic" />
-                    <section className="thecomment">
-                      <h5>{com.username}</h5>
-                      <p>{com.comment}</p>
+            comments
+              .sort((a, b) => (a.date > b.date ? 1 : -1))
+              .map((com) => {
+                return (
+                  <section className="comments" key={com.id}>
+                    <section className="com-container">
+                      <img src={com.profilepic} alt="profile-pic" />
+                      <section className="thecomment">
+                        <h5>{com.username}</h5>
+                        <p>{com.comment}</p>
+                      </section>
+                    </section>
+                    <section className="comment-foot">
+                      <section className="item">
+                        <p>{convertUnix(com.date)}</p>
+                        <div type="button">Like</div>
+                        <div
+                          type="button"
+                          onClick={() => mentionUser(com.username)}
+                        >
+                          Reply
+                        </div>
+                      </section>
                     </section>
                   </section>
-                  <section className="comment-foot">
-                    <section className="item">
-                      <p>{convertUnix(com.date)}</p>
-                      <div type="button">Like</div>
-                      <div
-                        type="button"
-                        onClick={() => mentionUser(com.username)}
-                      >
-                        Reply
-                      </div>
-                    </section>
-                  </section>
-                </section>
-              );
-            })}
+                );
+              })}
         </section>
       </section>
       <form className="comment-form" onSubmit={addComment}>
