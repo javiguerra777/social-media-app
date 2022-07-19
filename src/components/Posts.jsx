@@ -4,7 +4,12 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { deleteDoc, doc } from 'firebase/firestore';
+import {
+  deleteDoc,
+  doc,
+  updateDoc,
+  arrayUnion,
+} from 'firebase/firestore';
 import { nanoid } from 'nanoid';
 import { BsHandThumbsUp, BsThreeDots } from 'react-icons/bs';
 import { BiMessageAlt } from 'react-icons/bi';
@@ -90,6 +95,9 @@ const PostsWrapper = styled.section`
     background: none;
     border: none;
   }
+  .liked {
+    color: blue;
+  }
   .main-content {
     cursor: pointer;
   }
@@ -135,6 +143,7 @@ const PostsWrapper = styled.section`
 
 function Posts({ data, setPosts }) {
   const { comments } = useSelector((state) => state.data);
+  const { user } = useSelector((state) => state);
   const navigate = useNavigate();
   const [displayShared, setDisplayShared] = useState(false);
   const [displayOptions, setDisplayOptions] = useState(false);
@@ -155,8 +164,18 @@ function Posts({ data, setPosts }) {
     }
   };
 
-  const toggleLiked = () => {
-    console.log('you liked the post');
+  const toggleLiked = async (id) => {
+    const thisPost = doc(db, 'posts', id);
+    const likes = {
+      userid: user.uid,
+      useremail: user.email,
+      username: user.name,
+      profilepic: user.profilepic,
+      date: Date.now(),
+    };
+    await updateDoc(thisPost, {
+      likes: arrayUnion(likes),
+    });
   };
   const sharePost = (id) => {
     setDisplayShared(true);
@@ -247,7 +266,10 @@ function Posts({ data, setPosts }) {
               )}
               <section className="post-info">
                 <section className="beginning-content">
-                  {post.likes && 'Likes'}
+                  {post.likes &&
+                    (post.likes.length === 1
+                      ? `${post.likes.length} like`
+                      : `${post.likes.length} likes`)}
                 </section>
                 <section className="end-content">
                   <div>
@@ -265,7 +287,10 @@ function Posts({ data, setPosts }) {
                 </section>
               </section>
               <footer>
-                <button type="button" onClick={toggleLiked}>
+                <button
+                  type="button"
+                  onClick={() => toggleLiked(post.id)}
+                >
                   <BsHandThumbsUp /> Like
                 </button>
                 <button

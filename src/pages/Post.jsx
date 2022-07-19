@@ -11,6 +11,7 @@ import {
   addDoc,
   query,
   where,
+  onSnapshot,
 } from 'firebase/firestore';
 
 import { useSelector } from 'react-redux/es/exports';
@@ -151,12 +152,16 @@ function Post() {
   useEffect(() => {
     const q = query(commentCollectionRef, where('postid', '==', id));
     const getComments = async () => {
-      const commentsArr = [];
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((document) => {
-        commentsArr.push({ ...document.data(), id: document.id });
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const allComments = [];
+        querySnapshot.forEach((document) => {
+          allComments.push({
+            ...document.data(),
+            id: document.id,
+          });
+        });
+        setComments(allComments);
       });
-      setComments(commentsArr);
     };
     getComments();
   }, []);
